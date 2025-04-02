@@ -52,7 +52,28 @@ return [
     'ignore-paths' => [
 
     ],
+    
+    'pruning' => [
+        'enabled' => env('REQUEST_ANALYTICS_PRUNING_ENABLED', true),
+        'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 90),
+    ],
 ];
+```
+### Data Purning 
+You can delete your data from your database automatically.
+Add this to your `routes/console.php`
+
+```php
+use Illuminate\Support\Facades\Schedule;
+ 
+Schedule::command('model:prune')->everyMinute();
+```
+Or If you are using Laravel 11+ then you may use this also into your `bootstarp/app.php`
+```php
+use Illuminate\Console\Scheduling\Schedule;
+->withSchedule(function (Schedule $schedule) {
+     $schedule->command('model:prune')->everyMinute();
+    })
 ```
 You can publish the assets with this command:
 ```bash
