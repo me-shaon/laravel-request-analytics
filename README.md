@@ -120,6 +120,30 @@ php artisan vendor:publish --tag="request-analytics-views"
 $requestAnalytics = new MeShaon\RequestAnalytics();
 echo $requestAnalytics->echoPhrase('Hello, MeShaon!');
 ```
+## Access Control
+
+### Web Access
+To control access to the dashboard, implement the `CanAccessAnalyticsDashboard` interface in your User model:
+Then you can use the `canAccessAnalyticsDashboard` method in your your `User` model:
+```php
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
+use MeShaon\RequestAnalytics\Contracts\CanAccessAnalyticsDashboard;
+
+class User extends Authenticatable implements CanAccessAnalyticsDashboard
+{
+    
+    public function canAccessAnalyticsDashboard(): bool
+    {
+        return $this->role === Role::ADMIN;
+    }
+}
+
+```
 
 ## Testing
 
