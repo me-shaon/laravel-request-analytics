@@ -20,14 +20,15 @@ class RequestAnalyticsService
             'screen' => '',
             'referrer' => $requestDataDTO->referrer,
             'country' => $requestDataDTO->country,
-            'city' => '',
+            'city' => $requestDataDTO->city,
             'language' => $requestDataDTO->language,
             'query_params' => $requestDataDTO->queryParams,
-            'session_id' => session()->getId(),
+            'session_id' => $requestDataDTO->sessionId ?: session()->getId(),
+            'visitor_id' => $requestDataDTO->visitorId,
             'user_id' => Auth::id(),
             'http_method' => $requestDataDTO->httpMethod,
             'request_category' => $requestDataDTO->requestCategory,
-            'response_time' => $requestDataDTO->responseTime,
+            'response_time' => round($requestDataDTO->responseTime * 1000), // Convert to milliseconds
             'visited_at' => now(),
         ];
 

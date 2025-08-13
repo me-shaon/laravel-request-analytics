@@ -6,6 +6,7 @@ use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
@@ -45,58 +46,66 @@ class RequestAnalyticsController extends BaseController
 
     private function getCountries(): array
     {
-        $totalVisitors = $this->getBaseQuery()->count();
+        $cacheKey = "analytics_countries_{$this->dateRange}";
 
-        if ($totalVisitors === 0) {
-            return [];
-        }
+        return Cache::remember($cacheKey, now()->addMinutes(5), function () {
+            $totalVisitors = $this->getBaseQuery()->count();
 
-        $countries = $this->getBaseQuery()
-            ->select('country as name', DB::raw('LOWER(country) as code'), DB::raw('COUNT(DISTINCT session_id) as visitorCount'))
-            ->whereNotNull('country')
-            ->where('country', '!=', '')
-            ->groupBy('country')
-            ->orderBy('visitorCount', 'desc')
-            ->limit(10)
-            ->get();
+            if ($totalVisitors === 0) {
+                return [];
+            }
 
-        return $countries->map(function ($country) use ($totalVisitors) {
-            $percentage = round(($country->visitorCount / $totalVisitors) * 100, 1);
+            $countries = $this->getBaseQuery()
+                ->select('country as name', DB::raw('LOWER(country) as code'), DB::raw('COUNT(DISTINCT session_id) as visitorCount'))
+                ->whereNotNull('country')
+                ->where('country', '!=', '')
+                ->groupBy('country')
+                ->orderBy('visitorCount', 'desc')
+                ->limit(10)
+                ->get();
 
-            return [
-                'name' => $country->name,
-                'visitorCount' => $country->visitorCount,
-                'percentage' => $percentage,
-                'code' => strtolower($country->code),
-            ];
-        })->toArray();
+            return $countries->map(function ($country) use ($totalVisitors) {
+                $percentage = round(($country->visitorCount / $totalVisitors) * 100, 1);
+
+                return [
+                    'name' => $country->name,
+                    'visitorCount' => $country->visitorCount,
+                    'percentage' => $percentage,
+                    'code' => strtolower($country->code),
+                ];
+            })->toArray();
+        });
     }
 
     private function getBrowsers(): array
     {
-        $totalVisitors = $this->getBaseQuery()->count();
+        $cacheKey = "analytics_browsers_{$this->dateRange}";
 
-        if ($totalVisitors === 0) {
-            return [];
-        }
+        return Cache::remember($cacheKey, now()->addMinutes(5), function () {
+            $totalVisitors = $this->getBaseQuery()->count();
 
-        $browsers = $this->getBaseQuery()
-            ->select('browser', DB::raw('COUNT(DISTINCT session_id) as visitorCount'))
-            ->whereNotNull('browser')
-            ->groupBy('browser')
-            ->orderBy('visitorCount', 'desc')
-            ->limit(10)
-            ->get();
+            if ($totalVisitors === 0) {
+                return [];
+            }
 
-        return $browsers->map(function ($browser) use ($totalVisitors) {
-            $percentage = round(($browser->visitorCount / $totalVisitors) * 100, 1);
+            $browsers = $this->getBaseQuery()
+                ->select('browser', DB::raw('COUNT(DISTINCT session_id) as visitorCount'))
+                ->whereNotNull('browser')
+                ->groupBy('browser')
+                ->orderBy('visitorCount', 'desc')
+                ->limit(10)
+                ->get();
 
-            return [
-                'browser' => $browser->browser,
-                'visitorCount' => $browser->visitorCount,
-                'percentage' => $percentage,
-            ];
-        })->toArray();
+            return $browsers->map(function ($browser) use ($totalVisitors) {
+                $percentage = round(($browser->visitorCount / $totalVisitors) * 100, 1);
+
+                return [
+                    'browser' => $browser->browser,
+                    'visitorCount' => $browser->visitorCount,
+                    'percentage' => $percentage,
+                ];
+            })->toArray();
+        });
     }
 
     private function getOperatingSystems(): array

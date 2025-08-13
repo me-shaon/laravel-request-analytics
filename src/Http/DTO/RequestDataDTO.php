@@ -11,10 +11,13 @@ class RequestDataDTO
         public string $ipAddress,
         public string $referrer,
         public string $country,
+        public string $city,
         public string $language,
         public string $queryParams,
         public string $httpMethod,
-        public int $responseTime,
-        public string $requestCategory
+        public float $responseTime,
+        public string $requestCategory,
+        public string $sessionId = '',
+        public string $visitorId = ''
     ) {}
 }

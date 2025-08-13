@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('language')->nullable();
             $table->tinyText('query_params')->nullable();
             $table->string('session_id');
+            $table->string('visitor_id')->nullable()->index();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->string('http_method');
             $table->string('request_category');
