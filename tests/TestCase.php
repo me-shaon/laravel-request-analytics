@@ -26,11 +26,27 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
+        // Set up test database configuration
         config()->set('database.default', 'testing');
+        config()->set('database.connections.testing', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+        
+        // Set up secondary test connection for connection tests
+        config()->set('database.connections.analytics_test', [
+            'driver' => 'sqlite',  
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-request-analytics_table.php.stub';
-        $migration->up();
-        */
+        // Set up test session configuration
+        config()->set('session.driver', 'array');
+        
+        // Set up auth configuration for testing
+        config()->set('auth.defaults.provider', 'users');
+        config()->set('auth.providers.users.driver', 'eloquent');
+        config()->set('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class);
     }
 }

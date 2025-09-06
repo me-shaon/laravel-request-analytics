@@ -22,11 +22,18 @@ class RequestAnalytics extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+        
+        // Set configurable table name
         $this->table = config('request-analytics.database.table', 'request_analytics');
-
-        if ($connection = config('request-analytics.database.connection')) {
+        
+        // Set configurable database connection
+        $connection = config('request-analytics.database.connection');
+        if ($connection && $connection !== '') {
             $this->connection = $connection;
+        } else {
+            $this->connection = config('database.default');
         }
+    }
 
     /**
      * Get the prunable model query.
