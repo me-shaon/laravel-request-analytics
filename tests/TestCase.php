@@ -33,17 +33,17 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
-        
+
         // Set up secondary test connection for connection tests
         config()->set('database.connections.analytics_test', [
-            'driver' => 'sqlite',  
+            'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
         ]);
 
         // Set up test session configuration
         config()->set('session.driver', 'array');
-        
+
         // Set up auth configuration for testing
         config()->set('auth.defaults.provider', 'users');
         config()->set('auth.providers.users.driver', 'eloquent');
