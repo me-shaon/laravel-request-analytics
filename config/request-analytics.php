@@ -18,4 +18,9 @@ return [
     'ignore-paths' => [
 
     ],
+
+    'database' => [
+        'connection' => env('REQUEST_ANALYTICS_DB_CONNECTION', null), // null uses default Laravel connection
+        'table' => env('REQUEST_ANALYTICS_DB_TABLE', 'request_analytics'),
+    ],
 ];

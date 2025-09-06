@@ -282,8 +282,9 @@ class RequestAnalyticsController extends BaseController
             ->count('session_id');
 
         // Calculate bounce rate (percentage of sessions with only one page view)
-        $sessionsWithSinglePageView = DB::table(function ($query) use ($startDate) {
-            $query->from('request_analytics')
+        $tableName = config('request-analytics.database.table', 'request_analytics');
+        $sessionsWithSinglePageView = DB::table(function ($query) use ($startDate, $tableName) {
+            $query->from($tableName)
                 ->select('session_id')
                 ->where('visited_at', '>=', $startDate)
                 ->groupBy('session_id')

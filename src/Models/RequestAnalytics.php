@@ -14,4 +14,14 @@ class RequestAnalytics extends Model
     public const CREATED_AT = null;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->table = config('request-analytics.database.table', 'request_analytics');
+        
+        if ($connection = config('request-analytics.database.connection')) {
+            $this->connection = $connection;
+        }
+    }
 }

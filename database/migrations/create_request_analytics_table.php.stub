@@ -8,7 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('request_analytics', function (Blueprint $table) {
+        $tableName = config('request-analytics.database.table', 'request_analytics');
+        $connection = config('request-analytics.database.connection');
+        
+        Schema::connection($connection)->create($tableName, function (Blueprint $table) {
             $table->id();
             $table->string('path');
             $table->string('page_title');
@@ -29,5 +32,13 @@ return new class extends Migration
             $table->bigInteger('response_time')->nullable()->comment('Response time in milliseconds');
             $table->timestamp('visited_at');
         });
+    }
+    
+    public function down()
+    {
+        $tableName = config('request-analytics.database.table', 'request_analytics');
+        $connection = config('request-analytics.database.connection');
+        
+        Schema::connection($connection)->dropIfExists($tableName);
     }
 };
