@@ -3,6 +3,7 @@
 namespace MeShaon\RequestAnalytics;
 
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
+use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
 use Spatie\LaravelPackageTools\Package;
@@ -34,9 +35,8 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
 
     public function boot()
     {
+        parent::boot();
         $this->pushMiddlewareToPipeline();
-
-        return parent::boot();
     }
 
     private function registerMiddlewareAsAliases()
@@ -46,19 +46,19 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
 
         $router->aliasMiddleware('request-analytics.web', WebRequestCapture::class);
         $router->aliasMiddleware('request-analytics.api', APIRequestCapture::class);
+        $router->aliasMiddleware('request-analytics.access', AnalyticsDashboardMiddleware::class);
     }
 
     private function pushMiddlewareToPipeline()
     {
-        /* @var \Illuminate\Routing\Router */
-        $router = $this->app->make('router');
-
         if (config('request-analytics.capture.web')) {
-            $router->pushMiddlewareToGroup('web', WebRequestCapture::class);
+            $this->app[\Illuminate\Contracts\Http\Kernel::class]->appendMiddlewareToGroup('web',
+                WebRequestCapture::class);
         }
 
         if (config('request-analytics.capture.api')) {
-            $router->pushMiddlewareToGroup('api', APIRequestCapture::class);
+            $this->app[\Illuminate\Contracts\Http\Kernel::class]->appendMiddlewareToGroup('api',
+                APIRequestCapture::class);
         }
     }
 }

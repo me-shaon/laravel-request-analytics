@@ -56,9 +56,57 @@ return [
     'database' => [
         'connection' => env('REQUEST_ANALYTICS_DB_CONNECTION', null), // null uses default Laravel connection
         'table' => env('REQUEST_ANALYTICS_DB_TABLE', 'request_analytics'),
+    
+    'pruning' => [
+        'enabled' => env('REQUEST_ANALYTICS_PRUNING_ENABLED', true),
+        'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 90),
     ],
 ];
 ```
+### Data Purning 
+You can delete your data from your database automatically.
+
+If you are using Laravel 11+ then you may use `model:prune` command.
+Add this to your `routes/console.php`
+
+```php
+use Illuminate\Support\Facades\Schedule;
+ 
+Schedule::command('model:prune', [
+            '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
+        ])->daily();
+``` 
+Or try this `bootstarp/app.php`
+```php
+use Illuminate\Console\Scheduling\Schedule;
+->withSchedule(function (Schedule $schedule) {
+     $schedule->command('model:prune', [
+            '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
+        ])->daily();
+    })
+```
+
+If you are using Laravel 10 or below then you may use `model:prune` command.
+You may define all of your scheduled tasks in the schedule method of your application's `App\Console\Kernel` class
+```php
+<?php
+
+namespace App\Console;
+
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+class Kernel extends ConsoleKernel
+{
+    protected function schedule(Schedule $schedule): void
+    {
+        $schedule->command('model:prune', [
+            '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
+        ])->daily();
+    }
+}
+```
+
 You can publish the assets with this command:
 ```bash
 php artisan vendor:publish --tag="request-analytics-assets"
@@ -160,6 +208,30 @@ The migration will create the table with your specified name on your specified d
 ```php
 $requestAnalytics = new MeShaon\RequestAnalytics();
 echo $requestAnalytics->echoPhrase('Hello, MeShaon!');
+```
+## Access Control
+
+### Web Access
+To control access to the dashboard, implement the `CanAccessAnalyticsDashboard` interface in your User model:
+Then you can use the `canAccessAnalyticsDashboard` method in your your `User` model:
+```php
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
+use MeShaon\RequestAnalytics\Contracts\CanAccessAnalyticsDashboard;
+
+class User extends Authenticatable implements CanAccessAnalyticsDashboard
+{
+    
+    public function canAccessAnalyticsDashboard(): bool
+    {
+        return $this->role === Role::ADMIN;
+    }
+}
+
 ```
 
 ## Testing

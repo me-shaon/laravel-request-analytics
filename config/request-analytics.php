@@ -16,7 +16,12 @@ return [
     ],
 
     'ignore-paths' => [
+        env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
+    ],
 
+    'pruning' => [
+        'enabled' => env('REQUEST_ANALYTICS_PRUNING_ENABLED', true),
+        'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 90),
     ],
 
     'database' => [
