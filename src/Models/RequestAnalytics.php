@@ -19,7 +19,7 @@ class RequestAnalytics extends Model
     {
         parent::__construct($attributes);
         $this->table = config('request-analytics.database.table', 'request_analytics');
-        
+
         if ($connection = config('request-analytics.database.connection')) {
             $this->connection = $connection;
         }
