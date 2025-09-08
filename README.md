@@ -326,26 +326,58 @@ The package provides a comprehensive REST API for programmatic access to analyti
 Retrieve comprehensive analytics overview with summary statistics and chart data.
 
 **Parameters:**
-- `period` (optional): `today`, `yesterday`, `7days`, `30days`, `90days` (default: `30days`)
-- `with_percentages` (optional): Include percentage changes (default: `false`)
+- `date_range` (optional): Number of days to look back (1-365, default: 30)
+- `start_date` (optional): Start date (YYYY-MM-DD format)
+- `end_date` (optional): End date (YYYY-MM-DD format, must be after start_date)
+- `with_percentages` (optional): Include percentage data for applicable fields (true/false)
 
 **Response:**
 ```json
 {
-    "success": true,
     "data": {
         "summary": {
-            "total_page_views": 15420,
-            "unique_visitors": 8760,
-            "bounce_rate": 65.4,
-            "avg_session_duration": 180
+            "views": 15420,
+            "visitors": 8760,
+            "bounce_rate": "65.4%",
+            "average_visit_time": "3m 2s"
         },
-        "charts": {
-            "traffic_trend": [...],
-            "top_pages": [...],
-            "geographic_data": [...],
-            "device_breakdown": [...]
-        }
+        "chart": {
+            "labels": ["Jan 01", "Jan 02", "Jan 03"],
+            "datasets": [
+                {"label": "Views", "data": [120, 150, 180]},
+                {"label": "Visitors", "data": [85, 95, 110]}
+            ]
+        },
+        "top_pages": [
+            {"path": "/home", "views": 1250},
+            {"path": "/products", "views": 890}
+        ],
+        "top_referrers": [
+            {"domain": "google.com", "visits": 450},
+            {"domain": "facebook.com", "visits": 280}
+        ],
+        "browsers": [
+            {"browser": "Chrome", "count": 5420},
+            {"browser": "Firefox", "count": 2180}
+        ],
+        "devices": [
+            {"name": "Desktop", "count": 8760, "percentage": 65.2},
+            {"name": "Mobile", "count": 4680, "percentage": 34.8}
+        ],
+        "countries": [
+            {"name": "United States", "count": 5420, "percentage": 40.2, "code": "us"},
+            {"name": "Canada", "count": 2180, "percentage": 16.1, "code": "ca"}
+        ],
+        "operating_systems": [
+            {"name": "Windows", "count": 6840, "percentage": 50.8},
+            {"name": "macOS", "count": 3920, "percentage": 29.1}
+        ]
+    },
+    "date_range": {
+        "start": "2024-01-01T00:00:00.000000Z",
+        "end": "2024-01-31T23:59:59.000000Z",
+        "days": 30,
+        "key": "2024-01-01_2024-01-31"
     }
 }
 ```
@@ -354,33 +386,28 @@ Retrieve comprehensive analytics overview with summary statistics and chart data
 Get paginated visitor data with detailed information.
 
 **Parameters:**
-- `page` (optional): Page number for pagination (default: `1`)
-- `per_page` (optional): Items per page, max 100 (default: `15`)
-- `period` (optional): Time period filter
-- `country` (optional): Filter by country code
-- `device` (optional): Filter by device type
+- `date_range` (optional): Number of days to look back (1-365, default: 30)
+- `page` (optional): Page number for pagination (default: 1)
+- `per_page` (optional): Items per page, max 100 (default: 50)
 
 **Response:**
 ```json
 {
-    "success": true,
     "data": {
         "current_page": 1,
         "data": [
             {
-                "id": 1,
-                "ip_address": "192.168.1.***",
-                "country": "United States",
-                "city": "New York",
-                "device": "Desktop",
-                "browser": "Chrome 91",
-                "operating_system": "Windows 10",
-                "visited_at": "2024-01-15T14:30:00Z"
+                "visitor_id": "abc123xyz",
+                "page_views": 15,
+                "sessions": 3,
+                "first_visit": "2024-01-10T10:30:00.000000Z",
+                "last_visit": "2024-01-15T14:30:00.000000Z",
+                "unique_pages": 8
             }
         ],
         "total": 8760,
-        "per_page": 15,
-        "last_page": 584
+        "per_page": 50,
+        "last_page": 176
     }
 }
 ```
@@ -389,32 +416,42 @@ Get paginated visitor data with detailed information.
 Retrieve paginated page view data with performance metrics.
 
 **Parameters:**
-- `page` (optional): Page number for pagination
-- `per_page` (optional): Items per page, max 100  
-- `period` (optional): Time period filter
-- `url` (optional): Filter by specific URL pattern
+- `date_range` (optional): Number of days to look back (1-365, default: 30)
+- `path` (optional): Filter by specific path pattern (partial match)
+- `page` (optional): Page number for pagination (default: 1)
+- `per_page` (optional): Items per page, max 100 (default: 50)
 
 **Response:**
 ```json
 {
-    "success": true,
     "data": {
         "current_page": 1,
         "data": [
             {
                 "id": 1,
-                "url": "/products/smartphone",
-                "title": "Latest Smartphones",
-                "method": "GET",
-                "status_code": 200,
-                "load_time": 1.25,
+                "path": "/products/smartphone",
+                "page_title": "Latest Smartphones",
+                "ip_address": "192.168.1.***",
+                "operating_system": "Windows 10",
+                "browser": "Chrome",
+                "device": "Desktop",
+                "screen": "1920x1080",
                 "referrer": "https://google.com",
-                "user_agent": "Mozilla/5.0...",
-                "created_at": "2024-01-15T14:30:00Z"
+                "country": "US",
+                "city": "New York",
+                "language": "en-US",
+                "query_params": "{\"utm_source\":\"google\"}",
+                "session_id": "abc123xyz",
+                "visitor_id": "def456uvw",
+                "user_id": 42,
+                "http_method": "GET",
+                "request_category": "web",
+                "response_time": 1250,
+                "visited_at": "2024-01-15T14:30:00.000000Z"
             }
         ],
         "total": 15420,
-        "per_page": 15
+        "per_page": 50
     }
 }
 ```
