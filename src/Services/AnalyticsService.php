@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Services;
 
+use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Carbon\CarbonInterval;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
 class AnalyticsService
@@ -106,11 +106,11 @@ class AnalyticsService
     {
         $data = (clone $query)
             ->select(
-                DB::raw("DATE(visited_at) as date"),
+                DB::raw('DATE(visited_at) as date'),
                 DB::raw('COUNT(*) as views'),
                 DB::raw($this->getUniqueVisitorCountExpression())
             )
-            ->groupBy(DB::raw("DATE(visited_at)"))
+            ->groupBy(DB::raw('DATE(visited_at)'))
             ->orderBy('date')
             ->get()
             ->keyBy('date');
@@ -402,7 +402,7 @@ class AnalyticsService
 
     public function getUniqueVisitorCountExpression(): string
     {
-        return "COUNT(DISTINCT session_id) as unique_visitor_count";
+        return 'COUNT(DISTINCT session_id) as unique_visitor_count';
     }
 
     public function getDomainExpression(string $column): string
