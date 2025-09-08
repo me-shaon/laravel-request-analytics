@@ -6,8 +6,8 @@ namespace MeShaon\RequestAnalytics\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Carbon\CarbonInterval;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
 class AnalyticsService
@@ -34,46 +34,83 @@ class AnalyticsService
 
     public function getBaseQuery(array $dateRange, ?string $requestCategory = null): Builder
     {
-        $query = RequestAnalytics::whereBetween('visited_at', [$dateRange['start'], $dateRange['end']]);
-
-        if ($requestCategory) {
-            $query->where('request_category', $requestCategory);
-        }
+        $query = RequestAnalytics::whereBetween('visited_at', [$dateRange['start'], $dateRange['end']])
+            ->when($requestCategory, function (Builder $query, string $category) {
+                return $query->where('request_category', $category);
+            });
 
         return $query;
     }
 
-    public function getSummary($query): array
+    public function getSummary($query, array $dateRange): array
     {
         $totalViews = (clone $query)->count();
         $uniqueVisitors = $this->getUniqueVisitorCount($query);
-        $uniqueSessions = (clone $query)->distinct('session_id')->count('session_id');
-        $avgResponseTime = (clone $query)->avg('response_time');
+
+        // Calculate bounce rate (percentage of sessions with only one page view)
+        $tableName = config('request-analytics.database.table', 'request_analytics');
+        $connection = config('request-analytics.database.connection');
+
+        $startDate = clone $dateRange['start'];
+        $sessionsWithSinglePageView = DB::connection($connection)->table(function ($query) use ($startDate, $tableName): void {
+            $query->from($tableName)
+                ->select('session_id')
+                ->where('visited_at', '>=', $startDate)
+                ->groupBy('session_id')
+                ->havingRaw('COUNT(*) = 1');
+        }, 'single_page_sessions')->count();
+
+        $bounceRate = $uniqueVisitors > 0
+            ? round(($sessionsWithSinglePageView / $uniqueVisitors) * 100, 1)
+            : 0;
+
+        // Calculate average visit time
+        $durationExpression = $this->getDurationExpression('visited_at');
+        $sessionTimes = (clone $query)
+            ->select(
+                'session_id',
+                DB::raw("{$durationExpression} as duration")
+            )
+            ->groupBy('session_id')
+            ->having('duration', '>', 0)
+            ->pluck('duration')
+            ->toArray();
+
+        $avgVisitTime = count($sessionTimes) > 0
+            ? round(array_sum($sessionTimes) / count($sessionTimes), 1)
+            : 0;
 
         return [
-            'total_views' => $totalViews,
-            'unique_visitors' => $uniqueVisitors,
-            'unique_sessions' => $uniqueSessions,
-            'avg_response_time' => round($avgResponseTime ?: 0, 2),
+            'views' => $totalViews,
+            'visitors' => $uniqueVisitors,
+            'bounce_rate' => $bounceRate.'%',
+            'average_visit_time' => $this->formatTimeWithCarbon($avgVisitTime),
         ];
+    }
+
+    protected function formatTimeWithCarbon($seconds): string
+    {
+        if ($seconds <= 0) {
+            return '0s';
+        }
+
+        return CarbonInterval::seconds($seconds)
+            ->cascade()
+            ->forHumans([
+                'short' => true,
+                'minimumUnit' => 'second',
+            ]);
     }
 
     public function getChartData($query, array $dateRange): array
     {
-        $dateExpression = $this->getDateExpression('visited_at');
-        $useSessionId = $this->shouldUseSessionId($query);
-
-        $visitorCountExpression = $useSessionId
-            ? 'COUNT(DISTINCT session_id) as visitors'
-            : 'COUNT(DISTINCT visitor_id) as visitors';
-
         $data = (clone $query)
             ->select(
-                DB::raw("{$dateExpression} as date"),
+                DB::raw("DATE(visited_at) as date"),
                 DB::raw('COUNT(*) as views'),
-                DB::raw($visitorCountExpression)
+                DB::raw($this->getUniqueVisitorCountExpression())
             )
-            ->groupBy(DB::raw($dateExpression))
+            ->groupBy(DB::raw("DATE(visited_at)"))
             ->orderBy('date')
             ->get()
             ->keyBy('date');
@@ -89,7 +126,7 @@ class AnalyticsService
 
             if ($data->has($dateStr)) {
                 $views[] = $data->get($dateStr)->views;
-                $visitors[] = $data->get($dateStr)->visitors;
+                $visitors[] = $data->get($dateStr)->unique_visitor_count;
             } else {
                 $views[] = 0;
                 $visitors[] = 0;
@@ -174,16 +211,7 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getBrowsers($query, bool $withPercentages = false, ?string $cacheKey = null, ?int $cacheTtl = null): array
-    {
-        if ($cacheKey && $cacheTtl) {
-            return Cache::remember($cacheKey, now()->addMinutes($cacheTtl), fn (): array => $this->getBrowsersData($query, $withPercentages));
-        }
-
-        return $this->getBrowsersData($query, $withPercentages);
-    }
-
-    protected function getBrowsersData($query, bool $withPercentages): array
+    public function getBrowsersData($query, bool $withPercentages): array
     {
         $browsers = (clone $query)
             ->select('browser', DB::raw('COUNT(*) as count'))
@@ -245,16 +273,7 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getCountries($query, bool $withPercentages = false, ?string $cacheKey = null, ?int $cacheTtl = null): array
-    {
-        if ($cacheKey && $cacheTtl) {
-            return Cache::remember($cacheKey, now()->addMinutes($cacheTtl), fn (): array => $this->getCountriesData($query, $withPercentages));
-        }
-
-        return $this->getCountriesData($query, $withPercentages);
-    }
-
-    protected function getCountriesData($query, bool $withPercentages): array
+    public function getCountriesData($query, bool $withPercentages): array
     {
         $countries = (clone $query)
             ->select('country', DB::raw('COUNT(*) as count'))
@@ -327,13 +346,13 @@ class AnalyticsService
         $withPercentages = (bool) ($params['with_percentages'] ?? false);
 
         return [
-            'summary' => $this->getSummary($query),
+            'summary' => $this->getSummary($query, $dateRange),
             'chart' => $this->getChartData($query, $dateRange),
             'top_pages' => $this->getTopPages($query, $withPercentages),
             'top_referrers' => $this->getTopReferrers($query, $withPercentages),
-            'browsers' => $this->getBrowsers($query, $withPercentages),
+            'browsers' => $this->getBrowsersData($query, $withPercentages),
             'devices' => $this->getDevices($query, $withPercentages),
-            'countries' => $this->getCountries($query, $withPercentages),
+            'countries' => $this->getCountriesData($query, $withPercentages),
             'operating_systems' => $this->getOperatingSystems($query, $withPercentages),
         ];
     }
@@ -374,38 +393,16 @@ class AnalyticsService
             ->paginate($perPage);
     }
 
-    public function getDateExpression(string $column): string
-    {
-        $connection = config('request-analytics.database.connection');
-        $driver = DB::connection($connection)->getDriverName();
-
-        return match ($driver) {
-            'mysql' => "DATE({$column})",
-            'pgsql' => "DATE({$column})",
-            'sqlite' => "DATE({$column})",
-            default => "DATE({$column})"
-        };
-    }
-
-    protected function shouldUseSessionId($query): bool
-    {
-        $totalRecords = (clone $query)->count();
-        if ($totalRecords === 0) {
-            return false;
-        }
-
-        $validVisitorIds = (clone $query)->whereNotNull('visitor_id')->where('visitor_id', '!=', '')->count();
-
-        return ($validVisitorIds / $totalRecords) < 0.5;
-    }
-
     public function getUniqueVisitorCount($query): int
     {
-        if ($this->shouldUseSessionId($query)) {
-            return (clone $query)->distinct('session_id')->count('session_id');
-        }
+        return (clone $query)
+            ->select(DB::raw($this->getUniqueVisitorCountExpression()))
+            ->value('unique_visitor_count') ?? 0;
+    }
 
-        return (clone $query)->distinct('visitor_id')->count('visitor_id');
+    public function getUniqueVisitorCountExpression(): string
+    {
+        return "COUNT(DISTINCT session_id) as unique_visitor_count";
     }
 
     public function getDomainExpression(string $column): string

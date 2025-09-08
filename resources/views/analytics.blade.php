@@ -33,10 +33,10 @@
                 <x-request-analytics::stats.count label="Visitors" :value='$average["visitors"]'/>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
-                <x-request-analytics::stats.count label="Bounce Rate" :value='$average["bounce-rate"]'/>
+                <x-request-analytics::stats.count label="Bounce Rate" :value='$average["bounce_rate"]'/>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
-                <x-request-analytics::stats.count label="Average Visit Time" :value='$average["average-visit-time"]'/>
+                <x-request-analytics::stats.count label="Average Visit Time" :value='$average["average_visit_time"]'/>
             </div>
         </div>
 
