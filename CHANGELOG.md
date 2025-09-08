@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.2.0 - 2025-09-08
+
+### What's Changed
+
+* Fix package asset publishing by @phpfour in https://github.com/me-shaon/laravel-request-analytics/pull/38
+* Fix: views and unique visitors count issue
+* Fix: chart legend color issue
+
+### New Contributors
+
+* @phpfour made their first contribution in https://github.com/me-shaon/laravel-request-analytics/pull/38
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.1.2...v1.2.0
+
 ## v1.1.2 - 2025-09-07
 
 - Fix: Views and Visitors count in analytics
