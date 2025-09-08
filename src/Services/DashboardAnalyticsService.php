@@ -28,7 +28,7 @@ class DashboardAnalyticsService
         ];
     }
 
-    protected function getChartData($query, $dateRange): array
+    protected function getChartData($query, array $dateRange): array
     {
         $chartData = $this->analyticsService->getChartData($query, $dateRange);
 
