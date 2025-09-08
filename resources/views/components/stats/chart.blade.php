@@ -36,8 +36,15 @@
                                 weight: 'bold'
                             },
                             generateLabels: function(chart) {
-                                return Chart.defaults.plugins.legend.labels.generateLabels(chart).map(function(label) {
+                                return Chart.defaults.plugins.legend.labels.generateLabels(chart).map(function(label, index) {
+                                    const dataset = chart.data.datasets[index];
                                     label.lineWidth = 4;
+                                    label.strokeStyle = dataset.borderColor;
+                                    label.fillStyle = dataset.borderColor;
+                                    if (dataset.borderDash && dataset.borderDash.length > 0) {
+                                        label.lineDash = dataset.borderDash;
+                                        label.lineDashOffset = 0;
+                                    }
                                     return label;
                                 });
                             }
