@@ -302,8 +302,8 @@ function calendarFilter() {
                 this.endDate = this.tempEndDate ? this.formatDate(this.tempEndDate) : this.formatDate(this.tempStartDate);
                 this.updateCurrentLabel();
                 
-                // Submit the form
-                this.$el.closest('form').submit();
+                // Remove the automatic form submission
+                // this.$el.closest('form').submit();
             }
             this.showPresets = false;
         },
