@@ -35,7 +35,7 @@ class AnalyticsService
     public function getBaseQuery(array $dateRange, ?string $requestCategory = null): Builder
     {
         return RequestAnalytics::whereBetween('visited_at', [$dateRange['start'], $dateRange['end']])
-            ->when($requestCategory, fn(Builder $query, string $category) => $query->where('request_category', $category));
+            ->when($requestCategory, fn (Builder $query, string $category) => $query->where('request_category', $category));
     }
 
     public function getSummary($query, array $dateRange): array
