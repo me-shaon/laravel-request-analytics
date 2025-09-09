@@ -21,10 +21,10 @@ class AnalyticsApiTest extends BaseFeatureTestCase
             ->assertJsonStructure([
                 'data' => [
                     'summary' => [
-                        'total_views',
-                        'unique_visitors',
-                        'unique_sessions',
-                        'avg_response_time',
+                        'views',
+                        'visitors',
+                        'bounce_rate',
+                        'average_visit_time',
                     ],
                     'chart',
                     'top_pages',
@@ -132,8 +132,8 @@ class AnalyticsApiTest extends BaseFeatureTestCase
             ->assertJson([
                 'data' => [
                     'summary' => [
-                        'total_views' => 0,
-                        'unique_visitors' => 0,
+                        'views' => 0,
+                        'visitors' => 0,
                     ],
                 ],
             ]);

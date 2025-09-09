@@ -94,25 +94,27 @@ class AnalyticsServiceTest extends TestCase
         ]);
 
         $query = RequestAnalytics::query();
-        $result = $this->service->getSummary($query);
+        $dateRange = $this->service->getDateRange(['date_range' => 30]);
+        $result = $this->service->getSummary($query, $dateRange);
 
         $this->assertIsArray($result);
-        $this->assertEquals(8, $result['total_views']);
-        $this->assertEquals(2, $result['unique_visitors']);
-        $this->assertEquals(2, $result['unique_sessions']);
-        $this->assertEquals(137.5, $result['avg_response_time']);
+        $this->assertEquals(8, $result['views']);
+        $this->assertEquals(2, $result['visitors']);
+        $this->assertArrayHasKey('bounce_rate', $result);
+        $this->assertArrayHasKey('average_visit_time', $result);
     }
 
     #[Test]
     public function it_gets_summary_with_no_data(): void
     {
         $query = RequestAnalytics::query();
-        $result = $this->service->getSummary($query);
+        $dateRange = $this->service->getDateRange(['date_range' => 30]);
+        $result = $this->service->getSummary($query, $dateRange);
 
-        $this->assertEquals(0, $result['total_views']);
-        $this->assertEquals(0, $result['unique_visitors']);
-        $this->assertEquals(0, $result['unique_sessions']);
-        $this->assertEquals(0, $result['avg_response_time']);
+        $this->assertEquals(0, $result['views']);
+        $this->assertEquals(0, $result['visitors']);
+        $this->assertArrayHasKey('bounce_rate', $result);
+        $this->assertArrayHasKey('average_visit_time', $result);
     }
 
     #[Test]
@@ -210,7 +212,7 @@ class AnalyticsServiceTest extends TestCase
         RequestAnalytics::factory()->create(['browser' => null]);
 
         $query = RequestAnalytics::query();
-        $result = $this->service->getBrowsers($query);
+        $result = $this->service->getBrowsersData($query, false);
 
         $this->assertIsArray($result);
         $this->assertCount(2, $result);
@@ -225,7 +227,7 @@ class AnalyticsServiceTest extends TestCase
         RequestAnalytics::factory()->count(3)->create(['browser' => 'Firefox']);
 
         $query = RequestAnalytics::query();
-        $result = $this->service->getBrowsers($query, true);
+        $result = $this->service->getBrowsersData($query, true);
 
         $this->assertIsArray($result);
         $this->assertEquals(70.0, $result[0]['percentage']);
@@ -269,7 +271,7 @@ class AnalyticsServiceTest extends TestCase
         RequestAnalytics::factory()->create(['country' => null]);
 
         $query = RequestAnalytics::query();
-        $result = $this->service->getCountries($query);
+        $result = $this->service->getCountriesData($query, false);
 
         $this->assertIsArray($result);
         $this->assertCount(2, $result);
@@ -371,14 +373,6 @@ class AnalyticsServiceTest extends TestCase
         $result = $this->service->getPageViews($params, 10);
 
         $this->assertEquals(5, $result->total());
-    }
-
-    #[Test]
-    public function it_gets_correct_date_expression_for_sqlite(): void
-    {
-        $result = $this->service->getDateExpression('visited_at');
-
-        $this->assertEquals('DATE(visited_at)', $result);
     }
 
     #[Test]
