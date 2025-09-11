@@ -8,18 +8,19 @@
             </div>
             <div class="w-full sm:w-auto">
                 <form method="GET" action="{{ route(config('request-analytics.route.name')) }}" class="flex items-center gap-2 flex-wrap">
-                    <select name="date_range" class="bg-white border border-gray-300 rounded-lg px-3 py-2.5 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-10">
-                        <option value="7" {{ $dateRange == 7 ? 'selected' : '' }}>Last 7 days</option>
-                        <option value="30" {{ $dateRange == 30 ? 'selected' : '' }}>Last 30 days</option>
-                        <option value="90" {{ $dateRange == 90 ? 'selected' : '' }}>Last 90 days</option>
-                        <option value="365" {{ $dateRange == 365 ? 'selected' : '' }}>Last year</option>
-                    </select>
+                    <x-request-analytics::core.calendar-filter 
+                        :dateRange="$dateRange" 
+                        :startDate="request('start_date')"
+                        :endDate="request('end_date')"
+                    />
                     <select name="request_category" class="bg-white border border-gray-300 rounded-lg px-3 py-2.5 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-10">
                         <option value="" {{ !request('request_category') ? 'selected' : '' }}>All Requests</option>
                         <option value="web" {{ request('request_category') == 'web' ? 'selected' : '' }}>Web Only</option>
                         <option value="api" {{ request('request_category') == 'api' ? 'selected' : '' }}>API Only</option>
                     </select>
-                    <x-request-analytics::core.button type="submit" color="primary">Apply</x-request-analytics::core.button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors h-10">
+                        Apply Filters
+                    </button>
                 </form>
             </div>
         </div>

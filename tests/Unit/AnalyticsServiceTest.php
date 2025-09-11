@@ -93,6 +93,10 @@ class AnalyticsServiceTest extends TestCase
             'response_time' => 200,
         ]);
 
+        $dateRange = [
+            'start' => Carbon::now()->subDays(30),
+            'end' => Carbon::now(),
+        ];
         $query = RequestAnalytics::query();
         $dateRange = $this->service->getDateRange(['date_range' => 30]);
         $result = $this->service->getSummary($query, $dateRange);
@@ -107,6 +111,10 @@ class AnalyticsServiceTest extends TestCase
     #[Test]
     public function it_gets_summary_with_no_data(): void
     {
+        $dateRange = [
+            'start' => Carbon::now()->subDays(30),
+            'end' => Carbon::now(),
+        ];
         $query = RequestAnalytics::query();
         $dateRange = $this->service->getDateRange(['date_range' => 30]);
         $result = $this->service->getSummary($query, $dateRange);

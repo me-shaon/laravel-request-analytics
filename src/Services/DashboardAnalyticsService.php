@@ -24,7 +24,7 @@ class DashboardAnalyticsService
             'datasets' => $chartData['datasets'],
             'average' => $this->analyticsService->getSummary($query, $dateRange),
             'countries' => $this->analyticsService->getCountriesData($query, true),
-            'dateRange' => $params['date_range'],
+            'dateRange' => $params['date_range'] ?? $dateRange['days'],
         ];
     }
 
