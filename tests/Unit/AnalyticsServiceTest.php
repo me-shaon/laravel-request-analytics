@@ -381,7 +381,6 @@ class AnalyticsServiceTest extends TestCase
         $this->assertEquals(5, $result->total());
     }
 
-
     #[Test]
     public function it_gets_correct_domain_expression_for_sqlite(): void
     {
