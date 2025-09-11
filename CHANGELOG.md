@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.3.0 - 2025-09-11
+
+### What's Changed
+
+* chore(deps): bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/me-shaon/laravel-request-analytics/pull/39
+* Fix/country icon by @me-shaon in https://github.com/me-shaon/laravel-request-analytics/pull/42
+* Feat: improve calendar filter by @me-shaon in https://github.com/me-shaon/laravel-request-analytics/pull/41
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.2.0...v1.3.0
+
 ## v1.2.0 - 2025-09-08
 
 ### What's Changed
