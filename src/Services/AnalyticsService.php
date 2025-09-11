@@ -297,7 +297,7 @@ class AnalyticsService
                 'name' => $country['country'],
                 'count' => $country['count'],
                 'percentage' => $percentage,
-                'code' => strtolower((string) $country['country']),
+                'code' => $this->getCountryCode($country['country']),
             ];
         })->toArray();
     }
@@ -436,5 +436,75 @@ class AnalyticsService
             'sqlite' => "CAST((julianday(MAX({$column})) - julianday(MIN({$column}))) * 86400 AS INTEGER)",
             default => "TIMESTAMPDIFF(SECOND, MIN({$column}), MAX({$column}))"
         };
+    }
+
+    protected function getCountryCode(string $countryName): string
+    {
+        $countryMap = [
+            'Afghanistan' => 'af',
+            'Albania' => 'al',
+            'Algeria' => 'dz',
+            'Argentina' => 'ar',
+            'Australia' => 'au',
+            'Austria' => 'at',
+            'Bangladesh' => 'bd',
+            'Belgium' => 'be',
+            'Brazil' => 'br',
+            'Bulgaria' => 'bg',
+            'Canada' => 'ca',
+            'Chile' => 'cl',
+            'China' => 'cn',
+            'Colombia' => 'co',
+            'Croatia' => 'hr',
+            'Czech Republic' => 'cz',
+            'Denmark' => 'dk',
+            'Egypt' => 'eg',
+            'Finland' => 'fi',
+            'France' => 'fr',
+            'Germany' => 'de',
+            'Greece' => 'gr',
+            'Hungary' => 'hu',
+            'Iceland' => 'is',
+            'India' => 'in',
+            'Indonesia' => 'id',
+            'Iran' => 'ir',
+            'Iraq' => 'iq',
+            'Ireland' => 'ie',
+            'Israel' => 'il',
+            'Italy' => 'it',
+            'Japan' => 'jp',
+            'Jordan' => 'jo',
+            'Kenya' => 'ke',
+            'Malaysia' => 'my',
+            'Mexico' => 'mx',
+            'Netherlands' => 'nl',
+            'New Zealand' => 'nz',
+            'Nigeria' => 'ng',
+            'Norway' => 'no',
+            'Pakistan' => 'pk',
+            'Philippines' => 'ph',
+            'Poland' => 'pl',
+            'Portugal' => 'pt',
+            'Romania' => 'ro',
+            'Russia' => 'ru',
+            'Saudi Arabia' => 'sa',
+            'Singapore' => 'sg',
+            'Slovakia' => 'sk',
+            'Slovenia' => 'si',
+            'South Africa' => 'za',
+            'South Korea' => 'kr',
+            'Spain' => 'es',
+            'Sweden' => 'se',
+            'Switzerland' => 'ch',
+            'Thailand' => 'th',
+            'Turkey' => 'tr',
+            'Ukraine' => 'ua',
+            'United Arab Emirates' => 'ae',
+            'United Kingdom' => 'gb',
+            'United States' => 'us',
+            'Vietnam' => 'vn',
+        ];
+
+        return $countryMap[$countryName] ?? strtolower(substr($countryName, 0, 2));
     }
 }
