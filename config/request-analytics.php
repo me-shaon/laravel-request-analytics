@@ -79,7 +79,7 @@ return [
     |
     */
     'auto_publish_on_update' => env('REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE', true), // Auto-publish assets/views when package is updated
-    
+
     'publishing' => [
         'cleanup_before_publish' => env('REQUEST_ANALYTICS_CLEANUP_BEFORE_PUBLISH', true), // Remove old files before publishing new ones
         'force_publish' => env('REQUEST_ANALYTICS_FORCE_PUBLISH', true), // Force overwrite existing files

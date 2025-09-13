@@ -3,10 +3,10 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
-use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
+use Illuminate\Support\Facades\File;
 use MeShaon\RequestAnalytics\Commands\PublishRequestAnalyticsAssetsCommand;
+use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
@@ -83,13 +83,13 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
         }
 
         // Check if package version has changed
-        if (!$this->hasPackageVersionChanged()) {
+        if (! $this->hasPackageVersionChanged()) {
             return;
         }
 
         try {
             $currentVersion = $this->getCurrentPackageVersion();
-            
+
             if (config('request-analytics.publishing.log_publishing_activity', true)) {
                 if (function_exists('logger')) {
                     logger()->info('Request Analytics: Starting auto-republish process', [
@@ -174,14 +174,14 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
      */
     private function getCurrentPackageVersion(): string
     {
-        $composerJsonPath = __DIR__ . '/../composer.json';
-        
-        if (!File::exists($composerJsonPath)) {
+        $composerJsonPath = __DIR__.'/../composer.json';
+
+        if (! File::exists($composerJsonPath)) {
             return 'unknown';
         }
 
         $composerData = json_decode(File::get($composerJsonPath), true);
-        
+
         return $composerData['version'] ?? 'dev-main';
     }
 
@@ -191,8 +191,8 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     private function getStoredPackageVersion(): ?string
     {
         $versionFile = storage_path('framework/cache/request-analytics-version');
-        
-        if (!File::exists($versionFile)) {
+
+        if (! File::exists($versionFile)) {
             return null;
         }
 
@@ -206,10 +206,10 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         $currentVersion = $this->getCurrentPackageVersion();
         $versionFile = storage_path('framework/cache/request-analytics-version');
-        
+
         // Ensure the directory exists
         $directory = dirname($versionFile);
-        if (!File::exists($directory)) {
+        if (! File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
 

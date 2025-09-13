@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Tests\Feature;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
-use MeShaon\RequestAnalytics\Tests\Feature\BaseFeatureTestCase;
+use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Test;
 
 class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
@@ -28,27 +27,27 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
 
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        
+
         // Create dummy files
-        File::put($vendorViewsPath . '/test.blade.php', 'test view');
-        File::put($vendorAssetsPath . '/test.css', 'test css');
+        File::put($vendorViewsPath.'/test.blade.php', 'test view');
+        File::put($vendorAssetsPath.'/test.css', 'test css');
 
         // Ensure files exist
-        $this->assertTrue(File::exists($vendorViewsPath . '/test.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/test.css'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/test.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/test.css'));
 
         // Run the command with clean option
         Artisan::call('request-analytics:publish', ['--clean' => true, '--force' => true]);
 
         // Check that old files were cleaned up
-        $this->assertFalse(File::exists($vendorViewsPath . '/test.blade.php'));
-        $this->assertFalse(File::exists($vendorAssetsPath . '/test.css'));
+        $this->assertFalse(File::exists($vendorViewsPath.'/test.blade.php'));
+        $this->assertFalse(File::exists($vendorAssetsPath.'/test.css'));
 
         // Check that new files were published
         $this->assertTrue(File::exists($vendorViewsPath));
         $this->assertTrue(File::exists($vendorAssetsPath));
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     #[Test]
@@ -71,20 +70,20 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
 
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        
-        File::put($vendorViewsPath . '/test.blade.php', 'test view');
-        File::put($vendorAssetsPath . '/test.css', 'test css');
+
+        File::put($vendorViewsPath.'/test.blade.php', 'test view');
+        File::put($vendorAssetsPath.'/test.css', 'test css');
 
         // Run the command without clean option
         Artisan::call('request-analytics:publish', ['--force' => true]);
 
         // Check that old files still exist
-        $this->assertTrue(File::exists($vendorViewsPath . '/test.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/test.css'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/test.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/test.css'));
 
         // Check that new files were also published
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     #[Test]
@@ -106,20 +105,20 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
 
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        
-        File::put($vendorViewsPath . '/test.blade.php', 'test view');
-        File::put($vendorAssetsPath . '/test.css', 'test css');
+
+        File::put($vendorViewsPath.'/test.blade.php', 'test view');
+        File::put($vendorAssetsPath.'/test.css', 'test css');
 
         // Run command without --clean flag but with config enabled
         Artisan::call('request-analytics:publish', ['--force' => true]);
 
         // Check that cleanup happened due to config
-        $this->assertFalse(File::exists($vendorViewsPath . '/test.blade.php'));
-        $this->assertFalse(File::exists($vendorAssetsPath . '/test.css'));
+        $this->assertFalse(File::exists($vendorViewsPath.'/test.blade.php'));
+        $this->assertFalse(File::exists($vendorAssetsPath.'/test.css'));
 
         // Check that new files were published
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     #[Test]
@@ -143,17 +142,17 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
         File::makeDirectory($vendorAssetsPath, 0755, true);
 
         // Create existing files to test force behavior
-        File::put($vendorViewsPath . '/analytics.blade.php', 'old view content');
-        File::put($vendorAssetsPath . '/app.css', 'old css content');
+        File::put($vendorViewsPath.'/analytics.blade.php', 'old view content');
+        File::put($vendorAssetsPath.'/app.css', 'old css content');
 
         // Run command without --force flag but with config enabled
         Artisan::call('request-analytics:publish');
 
         // Files should still be updated due to config
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
-        
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
+
         // Content should be updated (not the old content)
-        $this->assertNotEquals('old view content', File::get($vendorViewsPath . '/analytics.blade.php'));
+        $this->assertNotEquals('old view content', File::get($vendorViewsPath.'/analytics.blade.php'));
     }
 }

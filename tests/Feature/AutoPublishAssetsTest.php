@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MeShaon\RequestAnalytics\Tests\Feature;
 
 use Illuminate\Support\Facades\File;
-use MeShaon\RequestAnalytics\Tests\Feature\BaseFeatureTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
 class AutoPublishAssetsTest extends BaseFeatureTestCase
@@ -13,7 +12,7 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Clean up any existing published files
         $this->cleanupPublishedFiles();
     }
@@ -23,7 +22,7 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         // Clean up after tests
         $this->cleanupPublishedFiles();
         $this->cleanupVersionFile();
-        
+
         parent::tearDown();
     }
 
@@ -72,8 +71,8 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         // Assets should be auto-published
         $this->assertTrue(File::exists($vendorViewsPath));
         $this->assertTrue(File::exists($vendorAssetsPath));
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     #[Test]
@@ -88,8 +87,8 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         // Simulate that assets were already published
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        File::put($vendorViewsPath . '/test.blade.php', 'existing view');
-        File::put($vendorAssetsPath . '/test.css', 'existing css');
+        File::put($vendorViewsPath.'/test.blade.php', 'existing view');
+        File::put($vendorAssetsPath.'/test.css', 'existing css');
 
         // Set the current version as already stored
         $this->setStoredVersion($this->getCurrentVersion());
@@ -103,8 +102,8 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         $method->invoke($serviceProvider);
 
         // Original test files should still exist (not cleaned up)
-        $this->assertTrue(File::exists($vendorViewsPath . '/test.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/test.css'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/test.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/test.css'));
     }
 
     #[Test]
@@ -122,8 +121,8 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         // Create existing files
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        File::put($vendorViewsPath . '/old.blade.php', 'old view');
-        File::put($vendorAssetsPath . '/old.css', 'old css');
+        File::put($vendorViewsPath.'/old.blade.php', 'old view');
+        File::put($vendorAssetsPath.'/old.css', 'old css');
 
         // Ensure no version file exists (simulating version change)
         $this->cleanupVersionFile();
@@ -137,12 +136,12 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         $method->invoke($serviceProvider);
 
         // Old files should be cleaned up
-        $this->assertFalse(File::exists($vendorViewsPath . '/old.blade.php'));
-        $this->assertFalse(File::exists($vendorAssetsPath . '/old.css'));
+        $this->assertFalse(File::exists($vendorViewsPath.'/old.blade.php'));
+        $this->assertFalse(File::exists($vendorAssetsPath.'/old.css'));
 
         // New files should be published
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     #[Test]
@@ -160,8 +159,8 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         // Create existing files
         File::makeDirectory($vendorViewsPath, 0755, true);
         File::makeDirectory($vendorAssetsPath, 0755, true);
-        File::put($vendorViewsPath . '/old.blade.php', 'old view');
-        File::put($vendorAssetsPath . '/old.css', 'old css');
+        File::put($vendorViewsPath.'/old.blade.php', 'old view');
+        File::put($vendorAssetsPath.'/old.css', 'old css');
 
         // Ensure no version file exists (simulating version change)
         $this->cleanupVersionFile();
@@ -175,12 +174,12 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
         $method->invoke($serviceProvider);
 
         // Old files should still exist
-        $this->assertTrue(File::exists($vendorViewsPath . '/old.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/old.css'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/old.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/old.css'));
 
         // New files should also be published
-        $this->assertTrue(File::exists($vendorViewsPath . '/analytics.blade.php'));
-        $this->assertTrue(File::exists($vendorAssetsPath . '/browsers/chrome.png'));
+        $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
+        $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
     }
 
     private function cleanupPublishedFiles(): void
@@ -200,7 +199,7 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
     private function cleanupVersionFile(): void
     {
         $versionFile = storage_path('framework/cache/request-analytics-version');
-        
+
         if (File::exists($versionFile)) {
             File::delete($versionFile);
         }
@@ -208,24 +207,24 @@ class AutoPublishAssetsTest extends BaseFeatureTestCase
 
     private function getCurrentVersion(): string
     {
-        $composerJsonPath = __DIR__ . '/../../composer.json';
-        
-        if (!File::exists($composerJsonPath)) {
+        $composerJsonPath = __DIR__.'/../../composer.json';
+
+        if (! File::exists($composerJsonPath)) {
             return 'unknown';
         }
 
         $composerData = json_decode(File::get($composerJsonPath), true);
-        
+
         return $composerData['version'] ?? 'dev-main';
     }
 
     private function setStoredVersion(string $version): void
     {
         $versionFile = storage_path('framework/cache/request-analytics-version');
-        
+
         // Ensure the directory exists
         $directory = dirname($versionFile);
-        if (!File::exists($directory)) {
+        if (! File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
 

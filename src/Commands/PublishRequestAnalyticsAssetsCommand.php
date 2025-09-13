@@ -3,8 +3,8 @@
 namespace MeShaon\RequestAnalytics\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class PublishRequestAnalyticsAssetsCommand extends Command
 {
@@ -43,13 +43,13 @@ class PublishRequestAnalyticsAssetsCommand extends Command
             // Clean up old published views
             if (File::exists($vendorViewsPath)) {
                 File::deleteDirectory($vendorViewsPath);
-                $this->info('Cleaned up old views: ' . $vendorViewsPath);
+                $this->info('Cleaned up old views: '.$vendorViewsPath);
             }
 
             // Clean up old published assets
             if (File::exists($vendorAssetsPath)) {
                 File::deleteDirectory($vendorAssetsPath);
-                $this->info('Cleaned up old assets: ' . $vendorAssetsPath);
+                $this->info('Cleaned up old assets: '.$vendorAssetsPath);
             }
         }
 
