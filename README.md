@@ -119,14 +119,57 @@ return [
 ```
 ### Assets & Views
 
-Publish dashboard assets:
+#### Automatic Publishing (Recommended)
+
+The package includes **automated asset publishing** that automatically updates views and assets when the package is updated. This feature is enabled by default and requires no manual intervention.
+
+When you update the package via Composer, the system will:
+- Automatically detect the version change
+- Clean up old published files
+- Republish the latest views and assets
+- Log the process for transparency
+
+#### Manual Publishing
+
+You can still manually publish assets and views if needed:
+
 ```bash
+# Publish assets
 php artisan vendor:publish --tag="request-analytics-assets"
+
+# Publish views for customization
+php artisan vendor:publish --tag="request-analytics-views"
+
+# Or use the enhanced command with cleanup
+php artisan request-analytics:publish --clean --force
 ```
 
-Optionally, publish the views for customization:
+#### Configuration
+
+Control the auto-publishing behavior in your `.env` file:
+
+```env
+# Enable/disable auto-publishing (default: true)
+REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE=true
+
+# Clean up old files before publishing (default: true)
+REQUEST_ANALYTICS_CLEANUP_BEFORE_PUBLISH=true
+
+# Force overwrite existing files (default: true)
+REQUEST_ANALYTICS_FORCE_PUBLISH=true
+
+# Log publishing activities (default: true)
+REQUEST_ANALYTICS_LOG_PUBLISHING=true
+```
+
+To disable auto-publishing completely:
+```env
+REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE=false
+```
+
+When disabled, you'll need to manually republish after package updates:
 ```bash
-php artisan vendor:publish --tag="request-analytics-views"
+php artisan request-analytics:publish --clean --force
 ```
 
 ### Automated Data Pruning
@@ -192,6 +235,7 @@ protected function schedule(Schedule $schedule): void
 - **Queue Support**: Background processing for high-traffic applications  
 - **REST API**: Complete programmatic access to analytics data
 - **Laravel Integration**: Seamless integration with Laravel's authentication and middleware systems
+- **Automated Publishing**: Smart asset and view management with automatic updates
 
 ## Usage
 
