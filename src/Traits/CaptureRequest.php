@@ -17,8 +17,6 @@ trait CaptureRequest
             return null;
         }
 
-        
-
         // Skip bot traffic unless explicitly enabled
         if ($this->isBot($request) && ! config('request-analytics.capture.bots', false)) {
             return null;
