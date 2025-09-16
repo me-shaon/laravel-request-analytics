@@ -4,16 +4,23 @@
 
 @php
     function getOperatingSystemImage($os): string {
-        return match(strtolower($os)){
-            'windows' => assert('operating-systems/windows-logo.png'),
-            'linux' => assert('operating-systems/linux.png'),
-            'macos' => assert('operating-systems/mac-logo.png'),
-            'android' => assert('operating-systems/android-os.png'),
-            'ios' => assert('operating-systems/iphone.png'),
-            default => assert('operating-systems/unknown.png'),
+        $normalizedOs = str_replace(' ', '', strtolower($os));
+
+        // Handle Windows variants (Windows 10, Windows 7, etc.)
+        if (str_starts_with($normalizedOs, 'windows')) {
+            return asset('operating-systems/windows-logo.png');
+        }
+
+        return match($normalizedOs){
+            'linux' => asset('operating-systems/linux.png'),
+            'macosx' => asset('operating-systems/mac-logo.png'),
+            'android' => asset('operating-systems/android-os.png'),
+            'ios' => asset('operating-systems/iphone.png'),
+            default => asset('operating-systems/unknown.png'),
         };
     }
 @endphp
+
 <x-request-analytics::stats.list primaryLabel="Os" secondaryLabel="Visitors">
     @forelse($operatingSystems as $os)
         <x-request-analytics::stats.item
