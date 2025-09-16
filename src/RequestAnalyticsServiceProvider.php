@@ -3,8 +3,6 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use MeShaon\RequestAnalytics\Commands\PublishRequestAnalyticsAssetsCommand;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
@@ -69,5 +67,4 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
             $this->app[Kernel::class]->appendMiddlewareToGroup('api', APIRequestCapture::class);
         }
     }
-
 }
