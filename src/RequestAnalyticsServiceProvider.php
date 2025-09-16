@@ -3,6 +3,7 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Console\Scheduling\Schedule;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
@@ -39,6 +40,15 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         parent::boot();
         $this->pushMiddlewareToPipeline();
+
+        // Conditionally register pruning schedule so users need no manual setup
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
+            if (config('request-analytics.pruning.enabled', true)) {
+                $schedule->command('model:prune', [
+                    '--model' => 'MeShaon\\RequestAnalytics\\Models\\RequestAnalytics',
+                ])->daily();
+            }
+        });
     }
 
     private function registerMiddlewareAsAliases(): void
