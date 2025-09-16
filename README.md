@@ -119,19 +119,28 @@ return [
 ```
 ### Assets & Views
 
-Publish dashboard assets:
+The package provides multiple ways to publish assets and views. Choose the approach that best fits your needs:
+
+#### Standard Laravel Publishing (Recommended for Most Users)
+
+**Individual Publishing:**
 ```bash
-php artisan vendor:publish --tag="request-analytics-assets"
+# Publish assets only
+php artisan vendor:publish --tag="request-analytics-assets" --force
+
+# Publish views only  
+php artisan vendor:publish --tag="request-analytics-views" --force
 ```
 
-Optionally, publish the views for customization:
+**Combined Publishing (Most Common):**
 ```bash
-php artisan vendor:publish --tag="request-analytics-views"
+# Publish both assets and views in one command
+php artisan vendor:publish --tag="request-analytics-assets" --tag="request-analytics-views" --force
 ```
 
 #### Enhanced Publishing Command
 
-Use the enhanced command for better control over the publishing process:
+For advanced use cases, use our custom command:
 
 ```bash
 # Publish with cleanup (removes old files first)
@@ -141,14 +150,33 @@ php artisan request-analytics:publish --clean --force
 php artisan request-analytics:publish --force
 ```
 
-**Command Options:**
-- `--clean`: Clean up old published files before publishing new ones
-- `--force`: Force overwrite existing files
+#### When to Use the Enhanced Command
 
-**Note:** After package updates, you may need to republish assets and views to get the latest template changes:
+The custom `request-analytics:publish` command is useful when the package has **major blade template changes** that might conflict with previously published files. Use it with the `--clean` flag to remove old files before publishing new ones:
+
 ```bash
+# Use when package has major template changes
 php artisan request-analytics:publish --clean --force
 ```
+
+For regular updates, the standard Laravel approach works perfectly:
+```bash
+php artisan vendor:publish --tag="request-analytics-assets" --tag="request-analytics-views" --force
+```
+
+#### After Package Updates
+
+After updating the package via Composer, republish to get the latest changes:
+
+```bash
+# Standard approach (recommended)
+php artisan vendor:publish --tag="request-analytics-assets" --tag="request-analytics-views" --force
+
+# Or with cleanup if you have issues with old files
+php artisan request-analytics:publish --clean --force
+```
+
+**Note:** If you experience issues with blade template conflicts after package updates, use the enhanced command with `--clean` to resolve them.
 
 ### Automated Data Pruning
 
