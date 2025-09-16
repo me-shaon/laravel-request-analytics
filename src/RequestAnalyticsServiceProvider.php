@@ -2,8 +2,8 @@
 
 namespace MeShaon\RequestAnalytics;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Http\Kernel;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
