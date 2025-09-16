@@ -37,7 +37,7 @@ class PublishRequestAnalyticsAssetsCommand extends Command
         $vendorViewsPath = resource_path('views/vendor/request-analytics');
         $vendorAssetsPath = public_path('vendor/request-analytics');
 
-        if ($this->option('clean') || config('request-analytics.publishing.cleanup_before_publish', false)) {
+        if ($this->option('clean')) {
             $this->info('Cleaning up old published files...');
 
             // Clean up old published views
@@ -53,7 +53,7 @@ class PublishRequestAnalyticsAssetsCommand extends Command
             }
         }
 
-        $forcePublish = $this->option('force') || config('request-analytics.publishing.force_publish', false);
+        $forcePublish = $this->option('force');
 
         // Republish views
         $this->info('Publishing views...');
