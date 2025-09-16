@@ -109,7 +109,6 @@ return [
 
     'privacy' => [
         'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-        'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true), // Respect Do Not Track header
     ],
 
     'cache' => [
@@ -131,41 +130,11 @@ php artisan vendor:publish --tag="request-analytics-views"
 
 ### Automated Data Pruning
 
-The package includes automatic data cleanup to manage database size. Configure pruning in your scheduler:
+The package now auto-registers a daily prune for `RequestAnalytics` when pruning is enabled via env—no manual scheduler code required.
 
-**Laravel 11+**
-
-Add to `routes/console.php`:
-```php
-use Illuminate\Support\Facades\Schedule;
-
-Schedule::command('model:prune', [
-    '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-])->daily();
-```
-
-Or in `bootstrap/app.php`:
-```php
-use Illuminate\Console\Scheduling\Schedule;
-
-->withSchedule(function (Schedule $schedule) {
-    $schedule->command('model:prune', [
-        '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
-})
-```
-
-**Laravel 10 and below**
-
-Add to `app/Console/Kernel.php`:
-```php
-protected function schedule(Schedule $schedule): void
-{
-    $schedule->command('model:prune', [
-        '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
-}
-```
+- Enable/disable: set `REQUEST_ANALYTICS_PRUNING_ENABLED=true|false`
+- Retention window: set `REQUEST_ANALYTICS_PRUNING_DAYS=90` (default 90)
+- Requirement: your application must run Laravel's scheduler (e.g., cron invoking `php artisan schedule:run` or `php artisan schedule:work`).
 
 ## Key Features
 
@@ -260,12 +229,10 @@ The package supports multiple geolocation providers:
 ```php
 'privacy' => [
     'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-    'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true),
 ]
 ```
 
 - **IP Anonymization**: Masks the last octet of IPv4 addresses (192.168.1.xxx)
-- **Do Not Track**: Automatically respects browser DNT headers
 
 ### Bot Detection
 
