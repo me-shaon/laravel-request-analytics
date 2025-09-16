@@ -119,55 +119,33 @@ return [
 ```
 ### Assets & Views
 
-#### Automatic Publishing (Recommended)
+Publish dashboard assets:
+```bash
+php artisan vendor:publish --tag="request-analytics-assets"
+```
 
-The package includes **automated asset publishing** that automatically updates views and assets when the package is updated. This feature is enabled by default and requires no manual intervention.
+Optionally, publish the views for customization:
+```bash
+php artisan vendor:publish --tag="request-analytics-views"
+```
 
-When you update the package via Composer, the system will:
-- Automatically detect the version change
-- Clean up old published files
-- Republish the latest views and assets
-- Log the process for transparency
+#### Enhanced Publishing Command
 
-#### Manual Publishing
-
-You can still manually publish assets and views if needed:
+Use the enhanced command for better control over the publishing process:
 
 ```bash
-# Publish assets
-php artisan vendor:publish --tag="request-analytics-assets"
-
-# Publish views for customization
-php artisan vendor:publish --tag="request-analytics-views"
-
-# Or use the enhanced command with cleanup
+# Publish with cleanup (removes old files first)
 php artisan request-analytics:publish --clean --force
+
+# Publish without cleanup (preserves existing files)
+php artisan request-analytics:publish --force
 ```
 
-#### Configuration
+**Command Options:**
+- `--clean`: Clean up old published files before publishing new ones
+- `--force`: Force overwrite existing files
 
-Control the auto-publishing behavior in your `.env` file:
-
-```env
-# Enable/disable auto-publishing (default: true)
-REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE=true
-
-# Clean up old files before publishing (default: true)
-REQUEST_ANALYTICS_CLEANUP_BEFORE_PUBLISH=true
-
-# Force overwrite existing files (default: true)
-REQUEST_ANALYTICS_FORCE_PUBLISH=true
-
-# Log publishing activities (default: true)
-REQUEST_ANALYTICS_LOG_PUBLISHING=true
-```
-
-To disable auto-publishing completely:
-```env
-REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE=false
-```
-
-When disabled, you'll need to manually republish after package updates:
+**Note:** After package updates, you may need to republish assets and views to get the latest template changes:
 ```bash
 php artisan request-analytics:publish --clean --force
 ```
@@ -235,7 +213,6 @@ protected function schedule(Schedule $schedule): void
 - **Queue Support**: Background processing for high-traffic applications  
 - **REST API**: Complete programmatic access to analytics data
 - **Laravel Integration**: Seamless integration with Laravel's authentication and middleware systems
-- **Automated Publishing**: Smart asset and view management with automatic updates
 
 ## Usage
 
