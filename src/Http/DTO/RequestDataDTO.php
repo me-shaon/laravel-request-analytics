@@ -15,6 +15,5 @@ class RequestDataDTO
         public string $queryParams,
         public string $httpMethod,
         public string $responseTime
-    ) {
-    }
+    ) {}
 }

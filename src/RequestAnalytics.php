@@ -2,6 +2,4 @@
 
 namespace MeShaon\RequestAnalytics;
 
-class RequestAnalytics
-{
-}
+class RequestAnalytics {}
