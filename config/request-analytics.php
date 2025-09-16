@@ -68,21 +68,4 @@ return [
         'ttl' => env('REQUEST_ANALYTICS_CACHE_TTL', 5), // Cache TTL in minutes
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Auto-Publishing Configuration
-    |--------------------------------------------------------------------------
-    |
-    | These options control the automatic publishing of assets and views
-    | when the package is updated. This helps ensure you always have
-    | the latest views and assets without manual intervention.
-    |
-    */
-    'auto_publish_on_update' => env('REQUEST_ANALYTICS_AUTO_PUBLISH_ON_UPDATE', true), // Auto-publish assets/views when package is updated
-
-    'publishing' => [
-        'cleanup_before_publish' => env('REQUEST_ANALYTICS_CLEANUP_BEFORE_PUBLISH', true), // Remove old files before publishing new ones
-        'force_publish' => env('REQUEST_ANALYTICS_FORCE_PUBLISH', true), // Force overwrite existing files
-        'log_publishing_activity' => env('REQUEST_ANALYTICS_LOG_PUBLISHING', true), // Log publishing activities
-    ],
 ];
