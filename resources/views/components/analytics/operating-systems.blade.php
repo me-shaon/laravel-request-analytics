@@ -5,9 +5,14 @@
 @php
     if (!function_exists('getOperatingSystemImage')) {
         function getOperatingSystemImage($os): string {
-            $os = str_replace(' ', '', strtolower($os));
-            return match($os){
-                'windows' => asset('vendor/request-analytics/operating-systems/windows-logo.png'),
+            $normalizedOs = str_replace(' ', '', strtolower($os));
+
+            // Handle Windows variants (Windows 10, Windows 7, etc.)
+            if (str_starts_with($normalizedOs, 'windows')) {
+                return asset('vendor/request-analytics/operating-systems/windows-logo.png');
+            }
+
+            return match($normalizedOs){
                 'linux' => asset('vendor/request-analytics/operating-systems/linux.png'),
                 'macos', 'macosx' => asset('vendor/request-analytics/operating-systems/mac-logo.png'),
                 'android' => asset('vendor/request-analytics/operating-systems/android-os.png'),
