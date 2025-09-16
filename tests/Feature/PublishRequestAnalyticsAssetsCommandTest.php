@@ -53,9 +53,6 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
     #[Test]
     public function it_can_publish_without_cleaning(): void
     {
-        // Disable cleanup in config
-        config(['request-analytics.publishing.cleanup_before_publish' => false]);
-
         // Create dummy directories and files
         $vendorViewsPath = resource_path('views/vendor/request-analytics');
         $vendorAssetsPath = public_path('vendor/request-analytics');
@@ -77,7 +74,6 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
         // Run the command without clean option
         Artisan::call('request-analytics:publish', ['--force' => true]);
 
-        // Check that old files still exist
         $this->assertTrue(File::exists($vendorViewsPath.'/test.blade.php'));
         $this->assertTrue(File::exists($vendorAssetsPath.'/test.css'));
 
@@ -87,11 +83,8 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
     }
 
     #[Test]
-    public function it_respects_configuration_for_cleanup_behavior(): void
+    public function it_respects_clean_flag_for_cleanup(): void
     {
-        // Set config to enable cleanup
-        config(['request-analytics.publishing.cleanup_before_publish' => true]);
-
         $vendorViewsPath = resource_path('views/vendor/request-analytics');
         $vendorAssetsPath = public_path('vendor/request-analytics');
 
@@ -109,10 +102,10 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
         File::put($vendorViewsPath.'/test.blade.php', 'test view');
         File::put($vendorAssetsPath.'/test.css', 'test css');
 
-        // Run command without --clean flag but with config enabled
-        Artisan::call('request-analytics:publish', ['--force' => true]);
+        // Run command with --clean flag
+        Artisan::call('request-analytics:publish', ['--clean' => true, '--force' => true]);
 
-        // Check that cleanup happened due to config
+        // Check that cleanup happened due to --clean flag
         $this->assertFalse(File::exists($vendorViewsPath.'/test.blade.php'));
         $this->assertFalse(File::exists($vendorAssetsPath.'/test.css'));
 
@@ -122,11 +115,8 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
     }
 
     #[Test]
-    public function it_respects_configuration_for_force_publish_behavior(): void
+    public function it_respects_force_flag_for_overwriting(): void
     {
-        // Set config to enable force publish
-        config(['request-analytics.publishing.force_publish' => true]);
-
         $vendorViewsPath = resource_path('views/vendor/request-analytics');
         $vendorAssetsPath = public_path('vendor/request-analytics');
 
@@ -143,12 +133,11 @@ class PublishRequestAnalyticsAssetsCommandTest extends BaseFeatureTestCase
 
         // Create existing files to test force behavior
         File::put($vendorViewsPath.'/analytics.blade.php', 'old view content');
-        File::put($vendorAssetsPath.'/app.css', 'old css content');
 
-        // Run command without --force flag but with config enabled
-        Artisan::call('request-analytics:publish');
+        // Run command with --force flag
+        Artisan::call('request-analytics:publish', ['--force' => true]);
 
-        // Files should still be updated due to config
+        // Files should be updated due to --force flag
         $this->assertTrue(File::exists($vendorViewsPath.'/analytics.blade.php'));
         $this->assertTrue(File::exists($vendorAssetsPath.'/browsers/chrome.png'));
 
