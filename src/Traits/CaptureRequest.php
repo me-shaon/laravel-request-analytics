@@ -17,10 +17,7 @@ trait CaptureRequest
             return null;
         }
 
-        // Respect Do Not Track header if enabled
-        if (config('request-analytics.privacy.respect_dnt') && $request->header('DNT') === '1') {
-            return null;
-        }
+        
 
         // Skip bot traffic unless explicitly enabled
         if ($this->isBot($request) && ! config('request-analytics.capture.bots', false)) {
