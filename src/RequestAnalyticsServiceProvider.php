@@ -39,6 +39,12 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         parent::boot();
         $this->pushMiddlewareToPipeline();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \MeShaon\RequestAnalytics\Commands\SetupCommand::class,
+            ]);
+        }
     }
 
     private function registerMiddlewareAsAliases(): void
