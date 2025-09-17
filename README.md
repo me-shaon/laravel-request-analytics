@@ -30,7 +30,19 @@ Install the package using Composer:
 composer require me-shaon/laravel-request-analytics
 ```
 
-### Database Setup
+### Automated Setup (Recommended) ✨
+
+For the fastest installation, use the interactive `setup` command. It handles all the boilerplate configuration in one step. **(This method is the recommended way to get started and replaces the manual steps outlined below)**
+
+```bash
+php artisan laravel-request-analytics:setup
+```
+
+This single command publishes the necessary configuration, assets, and migration files. It will then interactively prompt you to run the database migrations, providing a safe option that only affects this package's tables.
+
+### Manual Setup
+
+#### Database Setup
 
 Publish and run the migrations:
 
@@ -39,7 +51,7 @@ php artisan vendor:publish --tag="request-analytics-migrations"
 php artisan migrate
 ```
 
-### Configuration
+#### Configuration
 
 Publish the configuration file:
 
@@ -117,7 +129,7 @@ return [
     ],
 ];
 ```
-### Assets & Views
+#### Publish Assets & Views
 
 Publish dashboard assets:
 ```bash
@@ -141,7 +153,7 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('model:prune', [
     '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-])->daily();
+])->monthly();
 ```
 
 Or in `bootstrap/app.php`:
@@ -151,7 +163,7 @@ use Illuminate\Console\Scheduling\Schedule;
 ->withSchedule(function (Schedule $schedule) {
     $schedule->command('model:prune', [
         '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
+    ])->monthly();
 })
 ```
 
@@ -163,7 +175,7 @@ protected function schedule(Schedule $schedule): void
 {
     $schedule->command('model:prune', [
         '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
+    ])->monthly();
 }
 ```
 
@@ -181,7 +193,7 @@ protected function schedule(Schedule $schedule): void
 - **Do Not Track Support**: Respects browser DNT headers automatically
 - **Data Retention**: Configurable automatic data pruning and cleanup
 
-### Intelligence & Detection  
+### Intelligence & Detection
 - **Advanced Bot Detection**: Filters search engines, social bots, and crawlers
 - **Device Recognition**: Browser, OS, and device type identification
 - **Geolocation Services**: Multiple provider support (IP-API, IPGeolocation, MaxMind)
@@ -189,7 +201,7 @@ protected function schedule(Schedule $schedule): void
 
 ### Performance & Integration
 - **High Performance**: Optimized database queries with intelligent caching
-- **Queue Support**: Background processing for high-traffic applications  
+- **Queue Support**: Background processing for high-traffic applications
 - **REST API**: Complete programmatic access to analytics data
 - **Laravel Integration**: Seamless integration with Laravel's authentication and middleware systems
 
@@ -203,7 +215,7 @@ protected function schedule(Schedule $schedule): void
 
 ### Data Capture Settings
 - `capture.web`: Track web requests (default: `true`)
-- `capture.api`: Track API requests (default: `true`) 
+- `capture.api`: Track API requests (default: `true`)
 - `capture.bots`: Include bot traffic in analytics (default: `false`)
 
 ### Queue Processing
@@ -232,7 +244,7 @@ The package supports multiple geolocation providers:
 - 45 requests per minute limit
 - Includes country, region, city, timezone
 
-#### IPGeolocation  
+#### IPGeolocation
 ```php
 'geolocation' => [
     'enabled' => true,
@@ -271,7 +283,7 @@ The package supports multiple geolocation providers:
 
 Advanced bot detection includes:
 - **Search Engines**: Google, Bing, Yahoo, DuckDuckGo, Baidu
-- **Social Media**: Facebook, Twitter, LinkedIn, Pinterest crawlers  
+- **Social Media**: Facebook, Twitter, LinkedIn, Pinterest crawlers
 - **SEO Tools**: Ahrefs, SEMrush, Moz, Screaming Frog
 - **Monitoring**: Pingdom, UptimeRobot, StatusCake
 - **Development**: curl, wget, Postman, Insomnia
@@ -298,10 +310,10 @@ class User extends Authenticatable implements CanAccessAnalyticsDashboard
     {
         // Example: Only allow admin users
         return $this->role === 'admin';
-        
+
         // Or check specific permissions
         // return $this->can('view-analytics');
-        
+
         // Or allow all authenticated users
         // return true;
     }
@@ -473,7 +485,7 @@ API responses follow consistent error format:
 - `200`: Success
 - `400`: Bad Request (validation errors)
 - `401`: Unauthorized (invalid or missing token)
-- `403`: Forbidden (insufficient permissions)  
+- `403`: Forbidden (insufficient permissions)
 - `429`: Too Many Requests (rate limited)
 - `500`: Internal Server Error
 
