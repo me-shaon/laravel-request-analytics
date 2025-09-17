@@ -61,7 +61,6 @@ return [
 
     'privacy' => [
         'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-        'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true), // Respect Do Not Track header
     ],
 
     'cache' => [
