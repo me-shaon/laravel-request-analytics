@@ -22,25 +22,36 @@ Built with performance and privacy in mind, the package offers intelligent bot d
 - Laravel 10.0 or higher
 - MySQL 5.7+ / PostgreSQL 10+ / SQLite 3.8+
 
-### Install via Composer
+### Quick Installation (Recommended) ✨
 
-Install the package using Composer:
+The fastest way to get started is using our **one-command installation**:
 
 ```bash
+# Install the package
 composer require me-shaon/laravel-request-analytics
+
+# Run the interactive installer
+php artisan request-analytics:install
 ```
 
-### Automated Setup (Recommended) ✨
+This interactive installer will:
+- Welcome you with helpful information about the package
+- Optionally prompt you to star our GitHub repository
+- Provide next steps and dashboard access information
 
-For the fastest installation, use the interactive `setup` command. It handles all the boilerplate configuration in one step. **(This method is the recommended way to get started and replaces the manual steps outlined below)**
+**Alternative: Setup Command**
+
+For a more comprehensive setup that handles file publishing and migrations, use:
 
 ```bash
 php artisan laravel-request-analytics:setup
 ```
 
-This single command publishes the necessary configuration, assets, and migration files. It will then interactively prompt you to run the database migrations, providing a safe option that only affects this package's tables.
+This command publishes configuration files, assets, and migrations, then interactively prompts you to run database migrations.
 
-### Manual Setup
+### Manual Setup (Advanced)
+
+For users who prefer manual control over the installation process or need custom configurations:
 
 #### Database Setup
 
@@ -141,6 +152,21 @@ Optionally, publish the views for customization:
 php artisan vendor:publish --tag="request-analytics-views"
 ```
 
+#### Publishing Options
+
+The package supports granular publishing of individual components:
+
+```bash
+# Publish specific components
+php artisan vendor:publish --tag="request-analytics-config"
+php artisan vendor:publish --tag="request-analytics-migrations" 
+php artisan vendor:publish --tag="request-analytics-assets"
+php artisan vendor:publish --tag="request-analytics-views"
+
+# Or publish everything at once
+php artisan vendor:publish --provider="MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider"
+```
+
 ### Automated Data Pruning
 
 The package includes automatic data cleanup to manage database size. Configure pruning in your scheduler:
@@ -206,6 +232,29 @@ protected function schedule(Schedule $schedule): void
 - **Laravel Integration**: Seamless integration with Laravel's authentication and middleware systems
 
 ## Usage
+
+### Getting Started
+
+After installation, the package automatically starts tracking requests based on your configuration. Here's what happens next:
+
+1. **Dashboard Access**: Visit `/analytics` (or your configured pathname) to view the analytics dashboard
+2. **Automatic Tracking**: Request data is captured automatically for web and API routes
+
+### Quick Commands
+
+```bash
+# Install with interactive setup
+php artisan request-analytics:install
+
+# Comprehensive setup with file publishing
+php artisan laravel-request-analytics:setup
+
+# View available analytics commands
+php artisan list | grep analytics
+
+# Clear old analytics data (if pruning is enabled)
+php artisan model:prune --model="MeShaon\RequestAnalytics\Models\RequestAnalytics"
+```
 
 ## Configuration Options
 
