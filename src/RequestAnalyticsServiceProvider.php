@@ -2,6 +2,7 @@
 
 namespace MeShaon\RequestAnalytics;
 
+use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use Illuminate\Contracts\Http\Kernel;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
@@ -42,7 +43,7 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \MeShaon\RequestAnalytics\Commands\SetupCommand::class,
+                SetupCommand::class,
             ]);
         }
     }
