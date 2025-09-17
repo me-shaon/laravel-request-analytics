@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.3.1 - 2025-09-17
+
+### What's Changed
+
+* feat: Introduce interactive setup command for easier installation by @alnahian2003 in https://github.com/me-shaon/laravel-request-analytics/pull/51
+* Normalize OS name to handel windows variants by @OmarFaruk-0x01 in https://github.com/me-shaon/laravel-request-analytics/pull/50
+* chore(deps-dev): update rector/rector requirement from ^1.0.0 to ^2.1.7 by @dependabot[bot] in https://github.com/me-shaon/laravel-request-analytics/pull/45
+
+### New Contributors
+
+* @alnahian2003 made their first contribution in https://github.com/me-shaon/laravel-request-analytics/pull/51
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.3.0...v1.3.1
+
 ## v1.3.0 - 2025-09-11
 
 ### What's Changed
