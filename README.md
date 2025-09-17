@@ -40,8 +40,9 @@ php artisan laravel-request-analytics:setup
 
 This single command publishes the necessary configuration, assets, and migration files. It will then interactively prompt you to run the database migrations, providing a safe option that only affects this package's tables.
 
+### Manual Setup
 
-### Database Setup
+#### Database Setup
 
 Publish and run the migrations:
 
@@ -50,7 +51,7 @@ php artisan vendor:publish --tag="request-analytics-migrations"
 php artisan migrate
 ```
 
-### Configuration
+#### Configuration
 
 Publish the configuration file:
 
@@ -128,7 +129,7 @@ return [
     ],
 ];
 ```
-### Assets & Views
+#### Publish Assets & Views
 
 Publish dashboard assets:
 ```bash
@@ -152,7 +153,7 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('model:prune', [
     '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-])->daily();
+])->monthly();
 ```
 
 Or in `bootstrap/app.php`:
@@ -162,7 +163,7 @@ use Illuminate\Console\Scheduling\Schedule;
 ->withSchedule(function (Schedule $schedule) {
     $schedule->command('model:prune', [
         '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
+    ])->monthly();
 })
 ```
 
@@ -174,7 +175,7 @@ protected function schedule(Schedule $schedule): void
 {
     $schedule->command('model:prune', [
         '--model' => 'MeShaon\RequestAnalytics\Models\RequestAnalytics',
-    ])->daily();
+    ])->monthly();
 }
 ```
 
