@@ -4,7 +4,6 @@ namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
-use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
@@ -23,10 +22,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
             ->hasRoutes(['web', 'api'])
             ->hasAssets()
             ->hasMigrations(['create_request_analytics_table', 'add_indexes_to_request_analytics_table'])
-            ->hasCommands([
-                RequestAnalyticsCommand::class,
-                SetupCommand::class,
-            ])
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command
                     ->startWith(function (InstallCommand $command): void {
