@@ -27,9 +27,9 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                 RequestAnalyticsCommand::class,
                 SetupCommand::class,
             ])
-            ->hasInstallCommand(function (InstallCommand $command) {
+            ->hasInstallCommand(function (InstallCommand $command): void {
                 $command
-                    ->startWith(function (InstallCommand $command) {
+                    ->startWith(function (InstallCommand $command): void {
                         $command->info('Installing Laravel Request Analytics...');
                         $command->info('This package will help you track and analyze your application requests.');
                     })
@@ -37,7 +37,7 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                     ->publishAssets()
                     ->publish('views')
                     ->askToRunMigrations()
-                    ->endWith(function (InstallCommand $command) {
+                    ->endWith(function (InstallCommand $command): void {
                         $command->info('Laravel Request Analytics has been installed successfully!');
                         $command->info('You can now visit /analytics to view your dashboard.');
                         $command->info('Check the documentation for configuration options.');
