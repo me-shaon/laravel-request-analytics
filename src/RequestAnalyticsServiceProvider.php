@@ -29,6 +29,7 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                         $command->info('This package will help you track and analyze your application requests.');
                     })
                     ->publishConfigFile()
+                    ->publishMigrations()
                     ->publishAssets()
                     ->publish('views')
                     ->askToRunMigrations()
