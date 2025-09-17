@@ -24,7 +24,7 @@ Built with performance and privacy in mind, the package offers intelligent bot d
 
 ### Quick Installation (Recommended) ✨
 
-The fastest way to get started is using our **one-command installation**:
+Get up and running in just two commands:
 
 ```bash
 # Install the package
@@ -36,18 +36,12 @@ php artisan request-analytics:install
 
 This interactive installer will:
 - Welcome you with helpful information about the package
+- Automatically publish configuration files, assets, and views
+- Publish and optionally run database migrations
 - Optionally prompt you to star our GitHub repository
 - Provide next steps and dashboard access information
 
-**Alternative: Setup Command**
-
-For a more comprehensive setup that handles file publishing and migrations, use:
-
-```bash
-php artisan laravel-request-analytics:setup
-```
-
-This command publishes configuration files, assets, and migrations, then interactively prompts you to run database migrations.
+After running the installer, your analytics dashboard will be ready at `/analytics`!
 
 ### Manual Setup (Advanced)
 
@@ -243,11 +237,8 @@ After installation, the package automatically starts tracking requests based on 
 ### Quick Commands
 
 ```bash
-# Install with interactive setup
+# Run the interactive installer
 php artisan request-analytics:install
-
-# Comprehensive setup with file publishing
-php artisan laravel-request-analytics:setup
 
 # View available analytics commands
 php artisan list | grep analytics
