@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/me-shaon/laravel-request-analytics/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/me-shaon/laravel-request-analytics/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/me-shaon/laravel-request-analytics.svg?style=flat-square)](https://packagist.org/packages/me-shaon/laravel-request-analytics)
 
-![Laravel request analytics](https://github.com/me-shaon/laravel-request-analytics/blob/main/preview.png?raw=true)
+![Laravel request analytics](https://github.com/me-shaon/laravel-request-analytics/blob/main/banner_preview.png?raw=true)
 
 ## Overview
 
@@ -512,6 +512,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 - [Ahmed shamim](https://github.com/me-shaon)
 - [Omar Faruque](https://github.com/OmarFaruk-0x01)
 - [Md Abul Hassan](https://github.com/imabulhasan99)
+- [Al Nahian](https://github.com/alnahian2003)
 - [All Contributors](../../contributors)
 
 ## License
