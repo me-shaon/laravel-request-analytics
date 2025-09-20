@@ -1,9 +1,32 @@
 @props([
     'pages' => [],
+    'allPages' => null,
 ])
 
-<x-request-analytics::stats.list primaryLabel="Pages" secondaryLabel="Views">
-    @forelse($pages as $page)
+@php
+    $displayPages = array_slice($pages, 0, 5);
+    $allPagesData = $allPages ?? $pages;
+    $hasMore = count($allPagesData) > 5;
+    
+    $modalItems = collect($allPagesData)->map(function($page) {
+        return [
+            'label' => $page['path'],
+            'count' => $page['views'],
+            'percentage' => $page['percentage'],
+            'imgSrc' => null
+        ];
+    })->toArray();
+@endphp
+
+<x-request-analytics::stats.list 
+    primaryLabel="Pages" 
+    secondaryLabel="Views"
+    :showViewAll="$hasMore"
+    modalTitle="All Pages"
+    :allItems="$modalItems"
+    modalId="pages-modal"
+>
+    @forelse($displayPages as $page)
         <x-request-analytics::stats.item
             label="{{ $page['path'] }}"
             count="{{ $page['views'] }}"

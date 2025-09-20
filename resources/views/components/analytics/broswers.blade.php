@@ -1,5 +1,6 @@
 @props([
     'browsers' => [],
+    'allBrowsers' => null,
 ])
 
 @php
@@ -14,10 +15,30 @@
             };
         }
     }
+
+    $displayBrowsers = array_slice($browsers, 0, 5);
+    $allBrowsersData = $allBrowsers ?? $browsers;
+    $hasMore = count($allBrowsersData) > 5;
+    
+    $modalItems = collect($allBrowsersData)->map(function($browser) {
+        return [
+            'label' => $browser['browser'],
+            'count' => $browser['count'],
+            'percentage' => $browser['percentage'],
+            'imgSrc' => getBrowserImage($browser['browser'])
+        ];
+    })->toArray();
 @endphp
 
-<x-request-analytics::stats.list primaryLabel="Browser" secondaryLabel="">
-    @forelse($browsers as $browser)
+<x-request-analytics::stats.list 
+    primaryLabel="Browser" 
+    secondaryLabel=""
+    :showViewAll="$hasMore"
+    modalTitle="All Browsers"
+    :allItems="$modalItems"
+    modalId="browsers-modal"
+>
+    @forelse($displayBrowsers as $browser)
         <x-request-analytics::stats.item
             label="{{ $browser['browser'] }}"
             count="{{ $browser['count'] }}"
