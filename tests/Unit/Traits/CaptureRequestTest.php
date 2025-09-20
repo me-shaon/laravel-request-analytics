@@ -85,24 +85,9 @@ class CaptureRequestTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_null_when_dnt_header_is_present_and_respect_dnt_enabled(): void
-    {
-        config(['request-analytics.privacy.respect_dnt' => true]);
-
-        $request = Request::create('/test', 'GET');
-        $request->headers->set('DNT', '1');
-        $response = new Response('content');
-
-        $result = $this->traitClass->testCapture($request, $response, 'web');
-
-        $this->assertNull($result);
-    }
-
-    #[Test]
     public function it_returns_null_when_request_is_bot_and_bot_capture_disabled(): void
     {
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => false,
         ]);
 
@@ -119,7 +104,6 @@ class CaptureRequestTest extends TestCase
     public function it_returns_request_data_dto_when_conditions_are_met(): void
     {
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.geolocation.enabled' => false,
         ]);

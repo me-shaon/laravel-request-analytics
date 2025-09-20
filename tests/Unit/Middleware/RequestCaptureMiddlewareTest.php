@@ -46,7 +46,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => true,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -67,7 +66,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => false,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -88,7 +86,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => true,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -108,7 +105,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => false,
         ]);
 
@@ -128,7 +124,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -148,7 +143,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/ignore'],
             'request-analytics.route.pathname' => '/analytics',
@@ -170,7 +164,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -192,7 +185,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/*/internal'],
             'request-analytics.route.pathname' => '/analytics',
@@ -214,7 +206,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -236,7 +227,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*', 'livewire/*', '_debugbar/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -271,7 +261,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/health', 'api/admin/*', 'exact/path'],
             'request-analytics.route.pathname' => '/analytics',
@@ -306,7 +295,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         // Just test that middleware doesn't break when errors occur
         // The Log facade can be hard to mock correctly in this context
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -327,7 +315,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/test'],
             'request-analytics.route.pathname' => '/analytics',

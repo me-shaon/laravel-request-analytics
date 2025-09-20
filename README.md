@@ -121,7 +121,6 @@ return [
 
     'privacy' => [
         'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-        'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true), // Respect Do Not Track header
     ],
 
     'cache' => [
@@ -190,7 +189,6 @@ protected function schedule(Schedule $schedule): void
 ### Privacy & Compliance
 - **GDPR Compliance**: Built-in privacy controls and data anonymization
 - **IP Anonymization**: Configurable IP address masking for user privacy
-- **Do Not Track Support**: Respects browser DNT headers automatically
 - **Data Retention**: Configurable automatic data pruning and cleanup
 
 ### Intelligence & Detection
@@ -272,12 +270,10 @@ The package supports multiple geolocation providers:
 ```php
 'privacy' => [
     'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-    'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true),
 ]
 ```
 
 - **IP Anonymization**: Masks the last octet of IPv4 addresses (192.168.1.xxx)
-- **Do Not Track**: Automatically respects browser DNT headers
 
 ### Bot Detection
 
