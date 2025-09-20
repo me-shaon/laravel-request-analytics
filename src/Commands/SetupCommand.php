@@ -17,7 +17,8 @@ class SetupCommand extends Command
     {
         $this->info('Publishing migrations...');
         Artisan::call('vendor:publish', [
-            '--tag' => 'request-analytics-migrations',
+            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--tag' => 'laravel-request-analytics-migrations',
             '--force' => true,
         ]);
         $this->line(Artisan::output());
@@ -54,14 +55,16 @@ class SetupCommand extends Command
 
         $this->info('Publishing config...');
         Artisan::call('vendor:publish', [
-            '--tag' => 'request-analytics-config',
+            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--tag' => 'laravel-request-analytics-config',
             '--force' => (bool) $this->option('force'),
         ]);
         $this->line(Artisan::output());
 
         $this->info('Publishing assets...');
         Artisan::call('vendor:publish', [
-            '--tag' => 'request-analytics-assets',
+            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--tag' => 'laravel-request-analytics-assets',
             '--force' => (bool) $this->option('force'),
         ]);
         $this->line(Artisan::output());
