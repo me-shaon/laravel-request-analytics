@@ -2,6 +2,7 @@
 
 namespace MeShaon\RequestAnalytics\Commands;
 
+use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class SetupCommand extends Command
     {
         $this->info('Publishing migrations...');
         Artisan::call('vendor:publish', [
-            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--provider' => RequestAnalyticsServiceProvider::class,
             '--tag' => 'laravel-request-analytics-migrations',
             '--force' => true,
         ]);
@@ -55,7 +56,7 @@ class SetupCommand extends Command
 
         $this->info('Publishing config...');
         Artisan::call('vendor:publish', [
-            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--provider' => RequestAnalyticsServiceProvider::class,
             '--tag' => 'laravel-request-analytics-config',
             '--force' => (bool) $this->option('force'),
         ]);
@@ -63,7 +64,7 @@ class SetupCommand extends Command
 
         $this->info('Publishing assets...');
         Artisan::call('vendor:publish', [
-            '--provider' => 'MeShaon\\RequestAnalytics\\RequestAnalyticsServiceProvider',
+            '--provider' => RequestAnalyticsServiceProvider::class,
             '--tag' => 'laravel-request-analytics-assets',
             '--force' => (bool) $this->option('force'),
         ]);
