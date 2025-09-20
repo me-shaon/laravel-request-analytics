@@ -5,7 +5,6 @@ namespace MeShaon\RequestAnalytics\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
 
 class SetupCommand extends Command
 {
