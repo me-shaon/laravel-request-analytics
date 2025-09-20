@@ -2,9 +2,9 @@
 
 namespace MeShaon\RequestAnalytics;
 
-use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use Illuminate\Contracts\Http\Kernel;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
+use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
