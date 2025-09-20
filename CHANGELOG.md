@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.4.0 - 2025-09-20
+
+### What's Changed
+
+* remove: drop DNT header support and configuration by @theihasan in https://github.com/me-shaon/laravel-request-analytics/pull/47
+* Updated README banner with a fresh image by @alnahian2003 in https://github.com/me-shaon/laravel-request-analytics/pull/53
+* Add view all modal functionality to analytics components by @theihasan in https://github.com/me-shaon/laravel-request-analytics/pull/54
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.3.1...v1.4.0
+
 ## v1.3.1 - 2025-09-17
 
 ### What's Changed
