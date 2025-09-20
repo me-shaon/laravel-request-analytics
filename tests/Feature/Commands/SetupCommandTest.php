@@ -4,21 +4,33 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Tests\Feature\Commands;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use MeShaon\RequestAnalytics\Tests\TestCase;
+use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 use PHPUnit\Framework\Attributes\Test;
 
-class SetupCommandTest extends TestCase
+class SetupCommandTest extends Orchestra
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
+    use RefreshDatabase;
 
-        // Drop the table if it exists since we want to test the migration process
-        if (Schema::hasTable('request_analytics')) {
-            Schema::dropIfExists('request_analytics');
-        }
+    protected function getPackageProviders($app): array
+    {
+        return [RequestAnalyticsServiceProvider::class];
+    }
+
+    public function getEnvironmentSetUp($app): void
+    {
+        config()->set('database.default', 'testing');
+        config()->set('database.connections.testing', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+
+        // Only essential config needed for setup command testing
+        config()->set('request-analytics.database.table', 'request_analytics');
     }
 
     #[Test]

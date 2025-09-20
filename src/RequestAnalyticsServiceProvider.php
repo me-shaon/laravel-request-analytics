@@ -15,13 +15,10 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
+        // Manually publish migrations with proper timestamp
         $this->publishes([
-            __DIR__.'/../resources/assets' => public_path('/'),
-        ], 'laravel-request-analytics-assets');
-
-        $this->publishes([
-            __DIR__.'/../config/request-analytics.php' => config_path('request-analytics.php'),
-        ], 'laravel-request-analytics-config');
+            __DIR__.'/../database/migrations/create_request_analytics_table.php' => database_path('migrations/'.date('Y_m_d_His').'_create_request_analytics_table.php'),
+        ], 'laravel-request-analytics-migrations');
 
         $package
             ->name('laravel-request-analytics')
@@ -30,7 +27,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
             ->hasRoute('web')
             ->hasRoute('api')
             ->hasAssets()
-            ->hasMigration('create_request_analytics_table')
             ->hasCommand(RequestAnalyticsCommand::class);
 
         $this->registerMiddlewareAsAliases();
