@@ -20,13 +20,21 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
             __DIR__.'/../database/migrations/create_request_analytics_table.php' => database_path('migrations/'.date('Y_m_d_His').'_create_request_analytics_table.php'),
         ], 'laravel-request-analytics-migrations');
 
+        // Manually publish config with correct tag
+        $this->publishes([
+            __DIR__.'/../config/request-analytics.php' => config_path('request-analytics.php'),
+        ], 'laravel-request-analytics-config');
+
+        // Manually publish assets with correct tag
+        $this->publishes([
+            __DIR__.'/../resources/assets' => public_path('/'),
+        ], 'laravel-request-analytics-assets');
+
         $package
             ->name('laravel-request-analytics')
-            ->hasConfigFile()
             ->hasViews()
             ->hasRoute('web')
             ->hasRoute('api')
-            ->hasAssets()
             ->hasCommand(RequestAnalyticsCommand::class);
 
         $this->registerMiddlewareAsAliases();
