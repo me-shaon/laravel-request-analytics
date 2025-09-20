@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.4.1 - 2025-09-20
+
+### What's Changed
+
+* fix: place view all button at the bottom by @me-shaon in https://github.com/me-shaon/laravel-request-analytics/pull/55
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.4.0...v1.4.1
+
 ## v1.4.0 - 2025-09-20
 
 ### What's Changed
