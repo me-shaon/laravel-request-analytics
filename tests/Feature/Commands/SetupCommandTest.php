@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use Orchestra\Testbench\TestCase;
 use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
+use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
 class SetupCommandTest extends TestCase
@@ -22,7 +23,6 @@ class SetupCommandTest extends TestCase
         // Ensure clean state
         $migrationPath = database_path('migrations');
         File::cleanDirectory($migrationPath);
-
 
         $this->artisan('laravel-request-analytics:setup')
             ->expectsQuestion('How would you like to run migrations?',
