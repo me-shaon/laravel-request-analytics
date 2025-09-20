@@ -6,17 +6,11 @@ namespace MeShaon\RequestAnalytics\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
-use Orchestra\Testbench\TestCase;
+use MeShaon\RequestAnalytics\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
 class SetupCommandTest extends TestCase
 {
-    protected function getPackageProviders($app): array
-    {
-        return [RequestAnalyticsServiceProvider::class];
-    }
-
     #[Test]
     public function it_publishes_migrations_and_runs_only_package_migrations()
     {
