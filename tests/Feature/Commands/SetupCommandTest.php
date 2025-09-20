@@ -11,6 +11,16 @@ use PHPUnit\Framework\Attributes\Test;
 
 class SetupCommandTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Drop the table if it exists since we want to test the migration process
+        if (Schema::hasTable('request_analytics')) {
+            Schema::dropIfExists('request_analytics');
+        }
+    }
+
     #[Test]
     public function it_publishes_migrations_and_runs_only_package_migrations()
     {
