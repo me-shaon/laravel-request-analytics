@@ -6,7 +6,6 @@ namespace MeShaon\RequestAnalytics\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
 use MeShaon\RequestAnalytics\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
