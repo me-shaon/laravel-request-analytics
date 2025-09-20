@@ -10,7 +10,7 @@ return new class extends Migration
     {
         $tableName = config('request-analytics.database.table', 'request_analytics');
         $connection = config('request-analytics.database.connection');
-        
+
         Schema::connection($connection)->create($tableName, function (Blueprint $table) {
             $table->id();
             $table->string('path');

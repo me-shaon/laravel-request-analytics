@@ -17,11 +17,11 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         $this->publishes([
             __DIR__.'/../resources/assets' => public_path('/'),
-        ], 'assets');
+        ], 'laravel-request-analytics-assets');
 
         $this->publishes([
             __DIR__.'/../config/request-analytics.php' => config_path('request-analytics.php'),
-        ], 'config');
+        ], 'laravel-request-analytics-config');
 
         $package
             ->name('laravel-request-analytics')
