@@ -16,18 +16,7 @@
 <div class="p-6 min-h-[400px] flex flex-col">
     <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-900">{{ $primaryLabel }}</h3>
-        <div class="flex items-center gap-3">
-            @if($showViewAll && count($allItems) > 0)
-                <button 
-                    type="button"
-                    onclick="openModal('{{ $modalId }}')"
-                    class="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors duration-150"
-                >
-                    View All
-                </button>
-            @endif
-            <span class="text-sm font-medium text-gray-500">{{ $secondaryLabel }}</span>
-        </div>
+        <span class="text-sm font-medium text-gray-500">{{ $secondaryLabel }}</span>
     </div>
     <div class="flex-1 flex flex-col space-y-3">
         {{ $slot }}
@@ -35,6 +24,17 @@
     @if($footer)
         <div class="mt-4 pt-4 border-t border-gray-100">
             {{ $footer }}
+        </div>
+    @endif
+    @if($showViewAll && count($allItems) > 0)
+        <div class="mt-4 pt-4 border-t border-gray-100 flex justify-center">
+            <button
+                type="button"
+                onclick="openModal('{{ $modalId }}')"
+                class="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors duration-150"
+            >
+                View All
+            </button>
         </div>
     @endif
 </div>
