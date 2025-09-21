@@ -16,6 +16,7 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-request-analytics')
+            ->hasConfigFile()
             ->hasViews()
             ->hasRoutes(['web', 'api'])
             ->hasAssets()
