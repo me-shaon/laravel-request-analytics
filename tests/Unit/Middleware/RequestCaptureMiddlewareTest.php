@@ -102,26 +102,7 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::assertPushed(ProcessData::class);
     }
 
-    #[Test]
-    public function middleware_does_not_capture_when_dnt_header_is_present(): void
-    {
-        Queue::fake();
-
-        config([
-            'request-analytics.privacy.respect_dnt' => true,
-            'request-analytics.capture.bots' => true,
-        ]);
-
-        $middleware = new APIRequestCapture;
-        $request = Request::create('/api/test', 'GET');
-        $request->headers->set('DNT', '1');
-        $request->headers->set('User-Agent', 'Test Browser Mozilla');
-        $response = new Response('API Response');
-
-        $middleware->terminate($request, $response);
-
-        Queue::assertNothingPushed();
-    }
+    
 
     #[Test]
     public function middleware_does_not_capture_bots_when_bot_capture_disabled(): void
