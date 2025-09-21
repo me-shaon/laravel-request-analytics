@@ -3,13 +3,12 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
-use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class RequestAnalyticsServiceProvider extends PackageServiceProvider
 {
@@ -41,7 +40,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                     ->askToStarRepoOnGitHub('me-shaon/laravel-request-analytics');
             });
     }
-
 
     public function packageRegistered(): void
     {
