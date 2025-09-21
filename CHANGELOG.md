@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.5.0 - 2025-09-21
+
+### What's Changed
+
+* fix: service provider asset publish by @me-shaon in https://github.com/me-shaon/laravel-request-analytics/pull/56
+* refactor: Modernize service provider using Laravel Package Tools features by @theihasan in https://github.com/me-shaon/laravel-request-analytics/pull/52
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.4.1...v1.5.0
+
 ## v1.4.1 - 2025-09-20
 
 ### What's Changed
