@@ -52,7 +52,6 @@ class TestCase extends Orchestra
         config()->set('request-analytics.capture.api', true);
         config()->set('request-analytics.queue.enabled', false);
         config()->set('request-analytics.privacy.anonymize_ip', false);
-        config()->set('request-analytics.privacy.respect_dnt', true);
         config()->set('request-analytics.ignore-paths', []);
         config()->set('request-analytics.geolocation.enabled', false);
         config()->set('request-analytics.data.prune_days', 365);

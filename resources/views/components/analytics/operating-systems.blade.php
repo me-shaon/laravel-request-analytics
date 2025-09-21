@@ -1,5 +1,6 @@
 @props([
     'operatingSystems' => [],
+    'allOperatingSystems' => null,
 ])
 
 @php
@@ -21,9 +22,30 @@
             };
         }
     }
+
+    $displayOperatingSystems = array_slice($operatingSystems, 0, 5);
+    $allOperatingSystemsData = $allOperatingSystems ?? $operatingSystems;
+    $hasMore = count($allOperatingSystemsData) > 5;
+    
+    $modalItems = collect($allOperatingSystemsData)->map(function($os) {
+        return [
+            'label' => $os['name'],
+            'count' => $os['count'],
+            'percentage' => $os['percentage'],
+            'imgSrc' => getOperatingSystemImage($os['name'])
+        ];
+    })->toArray();
 @endphp
-<x-request-analytics::stats.list primaryLabel="Operating Systems" secondaryLabel="">
-    @forelse($operatingSystems as $os)
+
+<x-request-analytics::stats.list 
+    primaryLabel="Operating Systems" 
+    secondaryLabel=""
+    :showViewAll="$hasMore"
+    modalTitle="All Operating Systems"
+    :allItems="$modalItems"
+    modalId="operating-systems-modal"
+>
+    @forelse($displayOperatingSystems as $os)
         <x-request-analytics::stats.item
             label="{{ $os['name'] }}"
             count="{{ $os['count'] }}"

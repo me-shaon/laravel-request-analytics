@@ -6,6 +6,7 @@ namespace MeShaon\RequestAnalytics\Tests\Feature;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use MeShaon\RequestAnalytics\Contracts\CanAccessAnalyticsDashboard;
 use MeShaon\RequestAnalytics\Tests\TestCase;
 use Mockery;
@@ -35,6 +36,8 @@ class BaseFeatureTestCase extends TestCase
         $this->actingAs($user);
 
         // $this->withoutExceptionHandling();
+
+        Cache::flush();
     }
 
     protected function tearDown(): void

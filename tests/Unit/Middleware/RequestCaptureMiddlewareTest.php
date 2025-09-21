@@ -46,7 +46,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => true,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -67,7 +66,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => false,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -88,7 +86,6 @@ class RequestCaptureMiddlewareTest extends TestCase
 
         config([
             'request-analytics.queue.enabled' => true,
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -103,33 +100,11 @@ class RequestCaptureMiddlewareTest extends TestCase
     }
 
     #[Test]
-    public function middleware_does_not_capture_when_dnt_header_is_present(): void
-    {
-        Queue::fake();
-
-        config([
-            'request-analytics.privacy.respect_dnt' => true,
-            'request-analytics.capture.bots' => true,
-        ]);
-
-        $middleware = new APIRequestCapture;
-        $request = Request::create('/api/test', 'GET');
-        $request->headers->set('DNT', '1');
-        $request->headers->set('User-Agent', 'Test Browser Mozilla');
-        $response = new Response('API Response');
-
-        $middleware->terminate($request, $response);
-
-        Queue::assertNothingPushed();
-    }
-
-    #[Test]
     public function middleware_does_not_capture_bots_when_bot_capture_disabled(): void
     {
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => false,
         ]);
 
@@ -149,7 +124,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -169,7 +143,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/ignore'],
             'request-analytics.route.pathname' => '/analytics',
@@ -191,7 +164,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -213,7 +185,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/*/internal'],
             'request-analytics.route.pathname' => '/analytics',
@@ -235,7 +206,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -257,7 +227,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/admin/*', 'livewire/*', '_debugbar/*'],
             'request-analytics.route.pathname' => '/analytics',
@@ -292,7 +261,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/health', 'api/admin/*', 'exact/path'],
             'request-analytics.route.pathname' => '/analytics',
@@ -327,7 +295,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         // Just test that middleware doesn't break when errors occur
         // The Log facade can be hard to mock correctly in this context
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
         ]);
 
@@ -348,7 +315,6 @@ class RequestCaptureMiddlewareTest extends TestCase
         Queue::fake();
 
         config([
-            'request-analytics.privacy.respect_dnt' => false,
             'request-analytics.capture.bots' => true,
             'request-analytics.ignore-paths' => ['api/test'],
             'request-analytics.route.pathname' => '/analytics',
