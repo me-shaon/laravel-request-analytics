@@ -4,6 +4,7 @@ namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
 use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
+use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
@@ -17,7 +18,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-request-analytics')
-            ->hasConfigFile()
             ->hasViews()
             ->hasRoutes(['web', 'api'])
             ->hasAssets()
@@ -40,7 +40,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                     })
                     ->askToStarRepoOnGitHub('me-shaon/laravel-request-analytics');
             });
-    }
 
 
     public function packageRegistered(): void

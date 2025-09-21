@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/me-shaon/laravel-request-analytics/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/me-shaon/laravel-request-analytics/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/me-shaon/laravel-request-analytics.svg?style=flat-square)](https://packagist.org/packages/me-shaon/laravel-request-analytics)
 
-![Laravel request analytics](https://github.com/me-shaon/laravel-request-analytics/blob/main/preview.png?raw=true)
+![Laravel request analytics](https://github.com/me-shaon/laravel-request-analytics/blob/main/banner_preview.png?raw=true)
 
 ## Overview
 
@@ -126,7 +126,6 @@ return [
 
     'privacy' => [
         'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-        'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true), // Respect Do Not Track header
     ],
 
     'cache' => [
@@ -210,7 +209,6 @@ protected function schedule(Schedule $schedule): void
 ### Privacy & Compliance
 - **GDPR Compliance**: Built-in privacy controls and data anonymization
 - **IP Anonymization**: Configurable IP address masking for user privacy
-- **Do Not Track Support**: Respects browser DNT headers automatically
 - **Data Retention**: Configurable automatic data pruning and cleanup
 
 ### Intelligence & Detection
@@ -312,12 +310,10 @@ The package supports multiple geolocation providers:
 ```php
 'privacy' => [
     'anonymize_ip' => env('REQUEST_ANALYTICS_ANONYMIZE_IP', false),
-    'respect_dnt' => env('REQUEST_ANALYTICS_RESPECT_DNT', true),
 ]
 ```
 
 - **IP Anonymization**: Masks the last octet of IPv4 addresses (192.168.1.xxx)
-- **Do Not Track**: Automatically respects browser DNT headers
 
 ### Bot Detection
 
@@ -552,6 +548,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 - [Ahmed shamim](https://github.com/me-shaon)
 - [Omar Faruque](https://github.com/OmarFaruk-0x01)
 - [Md Abul Hassan](https://github.com/imabulhasan99)
+- [Al Nahian](https://github.com/alnahian2003)
 - [All Contributors](../../contributors)
 
 ## License
