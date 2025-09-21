@@ -3,8 +3,6 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
-use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
-use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
@@ -18,6 +16,7 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-request-analytics')
+            ->hasConfig('request-analytics')
             ->hasViews()
             ->hasRoutes(['web', 'api'])
             ->hasAssets()
