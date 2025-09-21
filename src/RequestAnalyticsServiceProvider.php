@@ -3,11 +3,10 @@
 namespace MeShaon\RequestAnalytics;
 
 use Illuminate\Contracts\Http\Kernel;
-use MeShaon\RequestAnalytics\Commands\RequestAnalyticsCommand;
-use MeShaon\RequestAnalytics\Commands\SetupCommand;
 use MeShaon\RequestAnalytics\Http\Middleware\AnalyticsDashboardMiddleware;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -15,41 +14,40 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        // Manually publish migrations with proper timestamp
-        $this->publishes([
-            __DIR__.'/../database/migrations/create_request_analytics_table.php' => database_path('migrations/'.date('Y_m_d_His').'_create_request_analytics_table.php'),
-        ], 'laravel-request-analytics-migrations');
-
-        // Manually publish config with correct tag
-        $this->publishes([
-            __DIR__.'/../config/request-analytics.php' => config_path('request-analytics.php'),
-        ], 'laravel-request-analytics-config');
-
-        // Manually publish assets with correct tag
-        $this->publishes([
-            __DIR__.'/../resources/assets' => public_path('/'),
-        ], 'laravel-request-analytics-assets');
-
         $package
             ->name('laravel-request-analytics')
+            ->hasConfigFile()
             ->hasViews()
-            ->hasRoute('web')
-            ->hasRoute('api')
-            ->hasCommand(RequestAnalyticsCommand::class);
+            ->hasRoutes(['web', 'api'])
+            ->hasAssets()
+            ->hasMigrations(['create_request_analytics_table', 'add_indexes_to_request_analytics_table'])
+            ->hasInstallCommand(function (InstallCommand $command): void {
+                $command
+                    ->startWith(function (InstallCommand $command): void {
+                        $command->info('Installing Laravel Request Analytics...');
+                        $command->info('This package will help you track and analyze your application requests.');
+                    })
+                    ->publishConfigFile()
+                    ->publishMigrations()
+                    ->publishAssets()
+                    ->askToRunMigrations()
+                    ->endWith(function (InstallCommand $command): void {
+                        $command->info('Laravel Request Analytics has been installed successfully!');
+                        $command->info('You can now visit /analytics to view your dashboard.');
+                        $command->info('Check the documentation for configuration options.');
+                    })
+                    ->askToStarRepoOnGitHub('me-shaon/laravel-request-analytics');
+            });
+    }
 
+    public function packageRegistered(): void
+    {
         $this->registerMiddlewareAsAliases();
     }
 
-    public function boot(): void
+    public function packageBooted(): void
     {
-        parent::boot();
         $this->pushMiddlewareToPipeline();
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                SetupCommand::class,
-            ]);
-        }
     }
 
     private function registerMiddlewareAsAliases(): void
