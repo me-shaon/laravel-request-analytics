@@ -38,7 +38,8 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                         $command->info('Check the documentation for configuration options.');
                     })
                     ->askToStarRepoOnGitHub('me-shaon/laravel-request-analytics');
-            });
+             });
+    }
 
 
     public function packageRegistered(): void
