@@ -30,7 +30,6 @@ class RequestAnalyticsServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->publishAssets()
-                    ->publish('views')
                     ->askToRunMigrations()
                     ->endWith(function (InstallCommand $command): void {
                         $command->info('Laravel Request Analytics has been installed successfully!');
