@@ -22,6 +22,16 @@ trait CaptureRequest
             return null;
         }
 
+        // Skip if IP address is in the skip list
+        if ($this->shouldSkipIp($request)) {
+            return null;
+        }
+
+        // Skip if referrer is in the skip list
+        if ($this->shouldSkipReferrer($request)) {
+            return null;
+        }
+
         return $this->prepareRequestData($request, $response, $requestCategory);
     }
 
@@ -248,5 +258,95 @@ trait CaptureRequest
             $request->header('User-Agent'),
             $request->ip()
         );
+    }
+
+    protected function shouldSkipIp(Request $request): bool
+    {
+        $skipIps = config('request-analytics.skip_ips', []);
+
+        if (empty($skipIps)) {
+            return false;
+        }
+
+        $clientIp = $request->ip();
+
+        foreach ($skipIps as $skipIp) {
+            // Handle CIDR notation (e.g., 192.168.1.0/24)
+            if (str_contains($skipIp, '/')) {
+                if ($this->ipInCidrRange($clientIp, $skipIp)) {
+                    return true;
+                }
+            } else {
+                // Handle exact IP match
+                if ($clientIp === $skipIp) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected function shouldSkipReferrer(Request $request): bool
+    {
+        $skipReferrers = config('request-analytics.skip_referrers', []);
+
+        if (empty($skipReferrers)) {
+            return false;
+        }
+
+        $referrer = $request->header('referer', '');
+
+        if (empty($referrer)) {
+            return false;
+        }
+
+        // Extract domain from referrer URL
+        $referrerDomain = $this->extractDomainFromUrl($referrer);
+
+        foreach ($skipReferrers as $skipReferrer) {
+            if ($referrerDomain === $skipReferrer) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function ipInCidrRange(string $ip, string $cidr): bool
+    {
+        [$subnet, $bits] = explode('/', $cidr);
+
+        // Convert IP addresses to long integers
+        $ipLong = ip2long($ip);
+        $subnetLong = ip2long($subnet);
+
+        if ($ipLong === false || $subnetLong === false) {
+            return false;
+        }
+
+        // Create subnet mask
+        $mask = -1 << (32 - (int) $bits);
+
+        // Apply mask to both IPs and compare
+        return ($ipLong & $mask) === ($subnetLong & $mask);
+    }
+
+    protected function extractDomainFromUrl(string $url): string
+    {
+        $parsed = parse_url($url);
+
+        if (! isset($parsed['host'])) {
+            return '';
+        }
+
+        $host = strtolower($parsed['host']);
+
+        // Remove www. prefix if present
+        if (str_starts_with($host, 'www.')) {
+            $host = substr($host, 4);
+        }
+
+        return $host;
     }
 }

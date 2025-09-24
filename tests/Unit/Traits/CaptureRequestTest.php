@@ -68,6 +68,26 @@ class CaptureRequestTest extends TestCase
             {
                 return $this->isBot($request);
             }
+
+            public function testShouldSkipIp(Request $request): bool
+            {
+                return $this->shouldSkipIp($request);
+            }
+
+            public function testShouldSkipReferrer(Request $request): bool
+            {
+                return $this->shouldSkipReferrer($request);
+            }
+
+            public function testIpInCidrRange(string $ip, string $cidr): bool
+            {
+                return $this->ipInCidrRange($ip, $cidr);
+            }
+
+            public function testExtractDomainFromUrl(string $url): string
+            {
+                return $this->extractDomainFromUrl($url);
+            }
         };
     }
 
@@ -301,5 +321,184 @@ class CaptureRequestTest extends TestCase
 
         $this->assertFalse($this->traitClass->testIsBot($humanRequest));
         $this->assertTrue($this->traitClass->testIsBot($botRequest));
+    }
+
+    #[Test]
+    public function it_returns_null_when_ip_should_be_skipped(): void
+    {
+        config(['request-analytics.skip_ips' => ['127.0.0.1', '192.168.1.100']]);
+
+        $request = Request::create('/test', 'GET');
+        $request->server->set('REMOTE_ADDR', '127.0.0.1');
+        $response = new Response('content');
+
+        $result = $this->traitClass->testCapture($request, $response, 'web');
+
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function it_returns_null_when_ip_is_in_cidr_range(): void
+    {
+        config(['request-analytics.skip_ips' => ['192.168.1.0/24']]);
+
+        $request = Request::create('/test', 'GET');
+        $request->server->set('REMOTE_ADDR', '192.168.1.50');
+        $response = new Response('content');
+
+        $result = $this->traitClass->testCapture($request, $response, 'web');
+
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function it_returns_null_when_referrer_should_be_skipped(): void
+    {
+        config(['request-analytics.skip_referrers' => ['spam-site.com', 'unwanted-referrer.com']]);
+
+        $request = Request::create('/test', 'GET');
+        $request->headers->set('referer', 'https://spam-site.com/page');
+        $response = new Response('content');
+
+        $result = $this->traitClass->testCapture($request, $response, 'web');
+
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function it_returns_data_when_ip_is_not_in_skip_list(): void
+    {
+        config([
+            'request-analytics.skip_ips' => ['127.0.0.1'],
+            'request-analytics.geolocation.enabled' => false,
+            'request-analytics.capture.bots' => true,
+        ]);
+
+        $request = Request::create('/test', 'GET');
+        $request->server->set('REMOTE_ADDR', '192.168.1.100');
+        $request->headers->set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+        $response = new Response('content');
+
+        $result = $this->traitClass->testCapture($request, $response, 'web');
+
+        $this->assertInstanceOf(RequestDataDTO::class, $result);
+    }
+
+    #[Test]
+    public function it_returns_data_when_referrer_is_not_in_skip_list(): void
+    {
+        config([
+            'request-analytics.skip_referrers' => ['spam-site.com'],
+            'request-analytics.geolocation.enabled' => false,
+            'request-analytics.capture.bots' => true,
+        ]);
+
+        $request = Request::create('/test', 'GET');
+        $request->headers->set('referer', 'https://example.com/page');
+        $request->headers->set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+        $response = new Response('content');
+
+        $result = $this->traitClass->testCapture($request, $response, 'web');
+
+        $this->assertInstanceOf(RequestDataDTO::class, $result);
+    }
+
+    #[Test]
+    public function it_should_skip_ip_correctly(): void
+    {
+        config(['request-analytics.skip_ips' => ['127.0.0.1', '10.0.0.1']]);
+
+        $skipRequest = Request::create('/test', 'GET');
+        $skipRequest->server->set('REMOTE_ADDR', '127.0.0.1');
+
+        $allowRequest = Request::create('/test', 'GET');
+        $allowRequest->server->set('REMOTE_ADDR', '192.168.1.1');
+
+        $this->assertTrue($this->traitClass->testShouldSkipIp($skipRequest));
+        $this->assertFalse($this->traitClass->testShouldSkipIp($allowRequest));
+    }
+
+    #[Test]
+    public function it_should_skip_referrer_correctly(): void
+    {
+        config(['request-analytics.skip_referrers' => ['spam-site.com', 'unwanted.com']]);
+
+        $skipRequest = Request::create('/test', 'GET');
+        $skipRequest->headers->set('referer', 'https://spam-site.com/some-page');
+
+        $skipWwwRequest = Request::create('/test', 'GET');
+        $skipWwwRequest->headers->set('referer', 'https://www.spam-site.com/some-page');
+
+        $allowRequest = Request::create('/test', 'GET');
+        $allowRequest->headers->set('referer', 'https://example.com/some-page');
+
+        $noReferrerRequest = Request::create('/test', 'GET');
+
+        $this->assertTrue($this->traitClass->testShouldSkipReferrer($skipRequest));
+        $this->assertTrue($this->traitClass->testShouldSkipReferrer($skipWwwRequest));
+        $this->assertFalse($this->traitClass->testShouldSkipReferrer($allowRequest));
+        $this->assertFalse($this->traitClass->testShouldSkipReferrer($noReferrerRequest));
+    }
+
+    #[Test]
+    #[DataProvider('cidrRangeProvider')]
+    public function it_checks_ip_in_cidr_range_correctly(string $ip, string $cidr, bool $expected): void
+    {
+        $result = $this->traitClass->testIpInCidrRange($ip, $cidr);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function cidrRangeProvider(): array
+    {
+        return [
+            ['192.168.1.1', '192.168.1.0/24', true],
+            ['192.168.1.255', '192.168.1.0/24', true],
+            ['192.168.2.1', '192.168.1.0/24', false],
+            ['10.0.0.1', '10.0.0.0/8', true],
+            ['11.0.0.1', '10.0.0.0/8', false],
+            ['172.16.0.1', '172.16.0.0/16', true],
+            ['172.17.0.1', '172.16.0.0/16', false],
+            ['127.0.0.1', '127.0.0.0/8', true],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('domainExtractionProvider')]
+    public function it_extracts_domain_from_url_correctly(string $url, string $expected): void
+    {
+        $result = $this->traitClass->testExtractDomainFromUrl($url);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public static function domainExtractionProvider(): array
+    {
+        return [
+            ['https://example.com', 'example.com'],
+            ['https://www.example.com', 'example.com'],
+            ['http://subdomain.example.com', 'subdomain.example.com'],
+            ['https://www.subdomain.example.com', 'subdomain.example.com'],
+            ['https://example.com/path/to/page', 'example.com'],
+            ['https://www.example.com/path?query=value#fragment', 'example.com'],
+            ['ftp://files.example.com', 'files.example.com'],
+            ['invalid-url', ''],
+        ];
+    }
+
+    #[Test]
+    public function it_handles_empty_skip_lists_correctly(): void
+    {
+        config([
+            'request-analytics.skip_ips' => [],
+            'request-analytics.skip_referrers' => [],
+        ]);
+
+        $request = Request::create('/test', 'GET');
+        $request->server->set('REMOTE_ADDR', '127.0.0.1');
+        $request->headers->set('referer', 'https://any-site.com');
+
+        $this->assertFalse($this->traitClass->testShouldSkipIp($request));
+        $this->assertFalse($this->traitClass->testShouldSkipReferrer($request));
     }
 }
