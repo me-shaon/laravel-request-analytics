@@ -300,7 +300,7 @@ trait CaptureRequest
 
         foreach ($skipReferrers as $skipReferrer) {
             // Check exact match or if referrer domain is a subdomain of skip domain
-            if ($referrerDomain === $skipReferrer || str_ends_with($referrerDomain, '.' . $skipReferrer)) {
+            if ($referrerDomain === $skipReferrer || str_ends_with($referrerDomain, '.'.$skipReferrer)) {
                 return true;
             }
         }
