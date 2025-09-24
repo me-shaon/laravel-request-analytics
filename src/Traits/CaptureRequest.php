@@ -272,15 +272,13 @@ trait CaptureRequest
 
         foreach ($skipIps as $skipIp) {
             // Handle CIDR notation (e.g., 192.168.1.0/24)
-            if (str_contains($skipIp, '/')) {
+            if (str_contains((string) $skipIp, '/')) {
                 if ($this->ipInCidrRange($clientIp, $skipIp)) {
                     return true;
                 }
-            } else {
+            } elseif ($clientIp === $skipIp) {
                 // Handle exact IP match
-                if ($clientIp === $skipIp) {
-                    return true;
-                }
+                return true;
             }
         }
 
@@ -344,7 +342,7 @@ trait CaptureRequest
 
         // Remove www. prefix if present
         if (str_starts_with($host, 'www.')) {
-            $host = substr($host, 4);
+            return substr($host, 4);
         }
 
         return $host;
