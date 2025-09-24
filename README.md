@@ -279,8 +279,10 @@ php artisan model:prune --model="MeShaon\RequestAnalytics\Models\RequestAnalytic
 - `ignore-paths`: Array of paths to exclude from tracking (e.g., admin routes, health checks)
 
 ### IP and Referrer Filtering
-- `skip_ips`: Array of IP addresses or CIDR blocks to skip tracking. Supports exact IP matches (e.g., `'127.0.0.1'`) and CIDR notation for IP ranges (e.g., `'192.168.1.0/24'`)
-- `skip_referrers`: Array of referrer domains to exclude from tracking. Useful for filtering out spam referrers or internal traffic (e.g., `'spam-site.com'`, `'internal-tool.com'`)
+Filter out unwanted traffic to improve data quality and protect privacy by excluding specific IP addresses and referrer domains from analytics tracking.
+
+- `skip_ips`: Array of IP addresses or CIDR blocks to skip tracking. Supports exact IP matches (e.g., `'127.0.0.1'`) and CIDR notation for IP ranges (e.g., `'192.168.1.0/24'`). Useful for excluding internal networks, admin IPs, or development environments.
+- `skip_referrers`: Array of referrer domains to exclude from tracking. Filters out spam referrers, bot traffic, or internal tools (e.g., `'spam-site.com'`, `'internal-tool.com'`) to maintain clean analytics data.
 
 ### Data Retention
 - `pruning.enabled`: Automatic data cleanup (default: `true`)

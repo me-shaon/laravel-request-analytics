@@ -7,6 +7,7 @@ use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Services\BotDetectionService;
 use MeShaon\RequestAnalytics\Services\GeolocationService;
 use MeShaon\RequestAnalytics\Services\VisitorTrackingService;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 trait CaptureRequest
@@ -271,13 +272,8 @@ trait CaptureRequest
         $clientIp = $request->ip();
 
         foreach ($skipIps as $skipIp) {
-            // Handle CIDR notation (e.g., 192.168.1.0/24)
-            if (str_contains((string) $skipIp, '/')) {
-                if ($this->ipInCidrRange($clientIp, $skipIp)) {
-                    return true;
-                }
-            } elseif ($clientIp === $skipIp) {
-                // Handle exact IP match
+            // IpUtils::checkIp handles both exact IPs and CIDR ranges for IPv4 and IPv6
+            if (IpUtils::checkIp($clientIp, $skipIp)) {
                 return true;
             }
         }
@@ -303,31 +299,13 @@ trait CaptureRequest
         $referrerDomain = $this->extractDomainFromUrl($referrer);
 
         foreach ($skipReferrers as $skipReferrer) {
-            if ($referrerDomain === $skipReferrer) {
+            // Check exact match or if referrer domain is a subdomain of skip domain
+            if ($referrerDomain === $skipReferrer || str_ends_with($referrerDomain, '.' . $skipReferrer)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    protected function ipInCidrRange(string $ip, string $cidr): bool
-    {
-        [$subnet, $bits] = explode('/', $cidr);
-
-        // Convert IP addresses to long integers
-        $ipLong = ip2long($ip);
-        $subnetLong = ip2long($subnet);
-
-        if ($ipLong === false || $subnetLong === false) {
-            return false;
-        }
-
-        // Create subnet mask
-        $mask = -1 << (32 - (int) $bits);
-
-        // Apply mask to both IPs and compare
-        return ($ipLong & $mask) === ($subnetLong & $mask);
     }
 
     protected function extractDomainFromUrl(string $url): string
