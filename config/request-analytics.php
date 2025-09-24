@@ -40,6 +40,18 @@ return [
         'livewire/*',
     ],
 
+    'skip_ips' => [
+        // '127.0.0.1',
+        // '192.168.1.0/24',
+        // Add IP addresses or CIDR blocks to skip tracking
+    ],
+
+    'skip_referrers' => [
+        // 'spam-site.com',
+        // 'unwanted-referrer.com',
+        // Add referrer domains to skip tracking
+    ],
+
     'pruning' => [
         'enabled' => env('REQUEST_ANALYTICS_PRUNING_ENABLED', true),
         'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 90),

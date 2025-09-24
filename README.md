@@ -103,6 +103,20 @@ return [
 
     'ignore-paths' => [
         env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
+        'broadcasting/auth',
+        'livewire/*',
+    ],
+
+    'skip_ips' => [
+        // '127.0.0.1',
+        // '192.168.1.0/24',
+        // Add IP addresses or CIDR blocks to skip tracking
+    ],
+
+    'skip_referrers' => [
+        // 'spam-site.com',
+        // 'unwanted-referrer.com',
+        // Add referrer domains to skip tracking
     ],
 
     'pruning' => [
@@ -213,6 +227,8 @@ protected function schedule(Schedule $schedule): void
 
 ### Intelligence & Detection
 - **Advanced Bot Detection**: Filters search engines, social bots, and crawlers
+- **IP Address Filtering**: Skip tracking for specific IP addresses or CIDR blocks (e.g., internal IPs, admin IPs)
+- **Referrer Filtering**: Exclude tracking for requests from specific referrer domains (e.g., spam sites, unwanted sources)
 - **Device Recognition**: Browser, OS, and device type identification
 - **Geolocation Services**: Multiple provider support (IP-API, IPGeolocation, MaxMind)
 - **Visitor Tracking**: Cookie-based unique visitor identification
@@ -261,6 +277,12 @@ php artisan model:prune --model="MeShaon\RequestAnalytics\Models\RequestAnalytic
 
 ### Path Filtering
 - `ignore-paths`: Array of paths to exclude from tracking (e.g., admin routes, health checks)
+
+### IP and Referrer Filtering
+Filter out unwanted traffic to improve data quality and protect privacy by excluding specific IP addresses and referrer domains from analytics tracking.
+
+- `skip_ips`: Array of IP addresses or CIDR blocks to skip tracking. Supports exact IP matches (e.g., `'127.0.0.1'`) and CIDR notation for IP ranges (e.g., `'192.168.1.0/24'`). Useful for excluding internal networks, admin IPs, or development environments.
+- `skip_referrers`: Array of referrer domains to exclude from tracking. Filters out spam referrers, bot traffic, or internal tools (e.g., `'spam-site.com'`, `'internal-tool.com'`) to maintain clean analytics data.
 
 ### Data Retention
 - `pruning.enabled`: Automatic data cleanup (default: `true`)

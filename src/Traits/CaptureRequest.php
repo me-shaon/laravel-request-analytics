@@ -7,6 +7,7 @@ use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Services\BotDetectionService;
 use MeShaon\RequestAnalytics\Services\GeolocationService;
 use MeShaon\RequestAnalytics\Services\VisitorTrackingService;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Response;
 
 trait CaptureRequest
@@ -19,6 +20,16 @@ trait CaptureRequest
 
         // Skip bot traffic unless explicitly enabled
         if ($this->isBot($request) && ! config('request-analytics.capture.bots', false)) {
+            return null;
+        }
+
+        // Skip if IP address is in the skip list
+        if ($this->shouldSkipIp($request)) {
+            return null;
+        }
+
+        // Skip if referrer is in the skip list
+        if ($this->shouldSkipReferrer($request)) {
             return null;
         }
 
@@ -248,5 +259,70 @@ trait CaptureRequest
             $request->header('User-Agent'),
             $request->ip()
         );
+    }
+
+    protected function shouldSkipIp(Request $request): bool
+    {
+        $skipIps = config('request-analytics.skip_ips', []);
+
+        if (empty($skipIps)) {
+            return false;
+        }
+
+        $clientIp = $request->ip();
+
+        foreach ($skipIps as $skipIp) {
+            // IpUtils::checkIp handles both exact IPs and CIDR ranges for IPv4 and IPv6
+            if (IpUtils::checkIp($clientIp, $skipIp)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function shouldSkipReferrer(Request $request): bool
+    {
+        $skipReferrers = config('request-analytics.skip_referrers', []);
+
+        if (empty($skipReferrers)) {
+            return false;
+        }
+
+        $referrer = $request->header('referer', '');
+
+        if (empty($referrer)) {
+            return false;
+        }
+
+        // Extract domain from referrer URL
+        $referrerDomain = $this->extractDomainFromUrl($referrer);
+
+        foreach ($skipReferrers as $skipReferrer) {
+            // Check exact match or if referrer domain is a subdomain of skip domain
+            if ($referrerDomain === $skipReferrer || str_ends_with($referrerDomain, '.'.$skipReferrer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function extractDomainFromUrl(string $url): string
+    {
+        $parsed = parse_url($url);
+
+        if (! isset($parsed['host'])) {
+            return '';
+        }
+
+        $host = strtolower($parsed['host']);
+
+        // Remove www. prefix if present
+        if (str_starts_with($host, 'www.')) {
+            return substr($host, 4);
+        }
+
+        return $host;
     }
 }
