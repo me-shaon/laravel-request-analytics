@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.6.0 - 2025-09-24
+
+### What's Changed
+
+* feat: add skip ip and referrer option by @me-shaon in https://github.com/me-shaon/laravel-request-analytics/pull/57
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.5.0...v1.6.0
+
 ## v1.5.0 - 2025-09-21
 
 ### What's Changed
