@@ -43,6 +43,8 @@ This interactive installer will:
 
 After running the installer, your analytics dashboard will be ready at `/analytics`!
 
+[![Package Installation Guideline Video Banner](package-installation-guideline-video-banner.webp)](https://youtu.be/m3m6t2v0YR8)
+
 ### Manual Setup (Advanced)
 
 For users who prefer manual control over the installation process or need custom configurations:
@@ -569,7 +571,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 - [Ahmed shamim](https://github.com/me-shaon)
 - [Omar Faruque](https://github.com/OmarFaruk-0x01)
-- [Md Abul Hassan](https://github.com/imabulhasan99)
+- [Md Abul Hassan](https://github.com/theihasan)
 - [Al Nahian](https://github.com/alnahian2003)
 - [All Contributors](../../contributors)
 
