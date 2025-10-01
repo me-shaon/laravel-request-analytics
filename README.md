@@ -43,7 +43,7 @@ This interactive installer will:
 
 After running the installer, your analytics dashboard will be ready at `/analytics`!
 
-[![Package Installation Guideline Video Banner](package-installation-guideline-video-banner.webp)](https://youtu.be/m3m6t2v0YR8)
+[![Package Installation Guideline Video Banner](https://github.com/me-shaon/laravel-request-analytics/blob/main/package-installation-guideline-video-banner.webp?raw=true)](https://youtu.be/m3m6t2v0YR8)
 
 ### Manual Setup (Advanced)
 
