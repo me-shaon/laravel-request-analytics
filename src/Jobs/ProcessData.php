@@ -1,13 +1,13 @@
 <?php
 
-namespace MeShaon\RequestAnalytics\Http\Jobs;
+namespace MeShaon\RequestAnalytics\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Services\RequestAnalyticsService;
 
 class ProcessData implements ShouldQueue

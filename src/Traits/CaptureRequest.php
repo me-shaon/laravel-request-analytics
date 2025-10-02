@@ -3,7 +3,7 @@
 namespace MeShaon\RequestAnalytics\Traits;
 
 use Illuminate\Http\Request;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Services\BotDetectionService;
 use MeShaon\RequestAnalytics\Services\GeolocationService;
 use MeShaon\RequestAnalytics\Services\VisitorTrackingService;

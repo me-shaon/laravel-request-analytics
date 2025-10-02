@@ -1,6 +1,6 @@
 <?php
 
-namespace MeShaon\RequestAnalytics\Http\DTO;
+namespace MeShaon\RequestAnalytics\DTO;
 
 class RequestDataDTO
 {

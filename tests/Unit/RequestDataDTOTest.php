@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Tests\Unit;
 
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 

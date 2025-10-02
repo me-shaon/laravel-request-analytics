@@ -8,8 +8,8 @@ use Closure;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
-use MeShaon\RequestAnalytics\Http\Jobs\ProcessData;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\Jobs\ProcessData;
 use MeShaon\RequestAnalytics\Traits\CaptureRequest;
 use Symfony\Component\HttpFoundation\Response;
 

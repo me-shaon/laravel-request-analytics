@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use MeShaon\RequestAnalytics\Controllers\Api\AnalyticsApiController;
+use MeShaon\RequestAnalytics\Http\Controllers\Api\AnalyticsApiController;
 
 Route::middleware(config('request-analytics.middleware.api'))
     ->prefix('api/v1/analytics')
