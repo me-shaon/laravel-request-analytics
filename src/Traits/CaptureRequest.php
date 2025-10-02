@@ -325,4 +325,9 @@ trait CaptureRequest
 
         return $host;
     }
+
+    protected function ipInCidrRange(string $ip, string $cidr): bool
+    {
+        return IpUtils::checkIp($ip, $cidr);
+    }
 }
