@@ -7,9 +7,9 @@ namespace MeShaon\RequestAnalytics\Tests\Unit\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Queue;
-use MeShaon\RequestAnalytics\Jobs\ProcessData;
 use MeShaon\RequestAnalytics\Http\Middleware\APIRequestCapture;
 use MeShaon\RequestAnalytics\Http\Middleware\WebRequestCapture;
+use MeShaon\RequestAnalytics\Jobs\ProcessData;
 use MeShaon\RequestAnalytics\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
