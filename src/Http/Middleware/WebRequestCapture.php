@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Jobs\ProcessData;
-use MeShaon\RequestAnalytics\Traits\CaptureRequest;
+use MeShaon\RequestAnalytics\Concern\CaptureRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebRequestCapture

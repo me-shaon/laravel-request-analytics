@@ -1,6 +1,6 @@
 <?php
 
-namespace MeShaon\RequestAnalytics\Traits;
+namespace MeShaon\RequestAnalytics\Concern;
 
 use Illuminate\Http\Request;
 use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
