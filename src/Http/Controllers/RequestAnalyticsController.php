@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MeShaon\RequestAnalytics\Controllers;
+namespace MeShaon\RequestAnalytics\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;

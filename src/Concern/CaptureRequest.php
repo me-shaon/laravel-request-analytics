@@ -1,9 +1,9 @@
 <?php
 
-namespace MeShaon\RequestAnalytics\Traits;
+namespace MeShaon\RequestAnalytics\Concern;
 
 use Illuminate\Http\Request;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Services\BotDetectionService;
 use MeShaon\RequestAnalytics\Services\GeolocationService;
 use MeShaon\RequestAnalytics\Services\VisitorTrackingService;
@@ -324,5 +324,10 @@ trait CaptureRequest
         }
 
         return $host;
+    }
+
+    protected function ipInCidrRange(string $ip, string $cidr): bool
+    {
+        return IpUtils::checkIp($ip, $cidr);
     }
 }

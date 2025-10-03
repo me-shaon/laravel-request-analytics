@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MeShaon\RequestAnalytics\Controllers\Api;
+namespace MeShaon\RequestAnalytics\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;

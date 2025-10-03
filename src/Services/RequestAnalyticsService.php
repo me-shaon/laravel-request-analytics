@@ -3,8 +3,8 @@
 namespace MeShaon\RequestAnalytics\Services;
 
 use Illuminate\Support\Facades\Auth;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Exceptions\RequestAnalyticsStorageException;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
 class RequestAnalyticsService

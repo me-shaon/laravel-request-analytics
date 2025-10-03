@@ -6,9 +6,9 @@ namespace MeShaon\RequestAnalytics\Tests\Unit\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use MeShaon\RequestAnalytics\Http\DTO\RequestDataDTO;
+use MeShaon\RequestAnalytics\Concern\CaptureRequest;
+use MeShaon\RequestAnalytics\DTO\RequestDataDTO;
 use MeShaon\RequestAnalytics\Tests\TestCase;
-use MeShaon\RequestAnalytics\Traits\CaptureRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
