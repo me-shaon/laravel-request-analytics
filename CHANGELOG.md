@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.7.0 - 2025-10-03
+
+### What's Changed
+
+* Add installation video banner and fix contributor username by @alnahian2003 in https://github.com/me-shaon/laravel-request-analytics/pull/58
+* Refactor directory structure to align with Laravel conventions by @theihasan in https://github.com/me-shaon/laravel-request-analytics/pull/59
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.6.0...v1.7.0
+
 ## v1.6.0 - 2025-09-24
 
 ### What's Changed
