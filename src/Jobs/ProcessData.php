@@ -16,7 +16,7 @@ class ProcessData implements ShouldQueue
 
     public function __construct(public RequestDataDTO $requestDataDTO)
     {
-        $this->onQueue(config('request-analytics.queue.on_queue'));
+        $this->onQueue((string) config('request-analytics.queue.on_queue'));
     }
 
     public function handle(RequestAnalyticsService $requestAnalyticsService): void
