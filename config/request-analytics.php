@@ -32,6 +32,7 @@ return [
 
     'queue' => [
         'enabled' => env('REQUEST_ANALYTICS_QUEUE_ENABLED', false),
+        'on_queue' => env('REQUEST_ANALYTICS_ON_QUEUE', 'default'),
     ],
 
     'ignore-paths' => [

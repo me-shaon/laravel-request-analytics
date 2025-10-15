@@ -101,6 +101,7 @@ return [
 
     'queue' => [
         'enabled' => env('REQUEST_ANALYTICS_QUEUE_ENABLED', false),
+        'on_queue' => env('REQUEST_ANALYTICS_ON_QUEUE', 'default'),
     ],
 
     'ignore-paths' => [
@@ -276,6 +277,7 @@ php artisan model:prune --model="MeShaon\RequestAnalytics\Models\RequestAnalytic
 
 ### Queue Processing
 - `queue.enabled`: Process analytics data in background jobs for better performance
+- `queue.on_queue`: Specifies the queue name for processing analytics jobs
 
 ### Path Filtering
 - `ignore-paths`: Array of paths to exclude from tracking (e.g., admin routes, health checks)
