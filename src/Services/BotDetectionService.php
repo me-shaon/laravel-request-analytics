@@ -50,7 +50,7 @@ class BotDetectionService
 
     public function isBot(?string $userAgent, ?string $ipAddress = null): bool
     {
-        if ($userAgent === null || $userAgent === '' || $userAgent === '0') {
+        if (in_array($userAgent, [null, '', '0'], true)) {
             return true; // No user agent is suspicious
         }
 
@@ -112,7 +112,7 @@ class BotDetectionService
 
     public function getBotName(?string $userAgent): ?string
     {
-        if ($userAgent === null || $userAgent === '' || $userAgent === '0') {
+        if (in_array($userAgent, [null, '', '0'], true)) {
             return null;
         }
 
