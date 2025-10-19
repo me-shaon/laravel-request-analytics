@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-request-analytics` will be documented in this file.
 
+## v1.8.0 - 2025-10-19
+
+### What's Changed
+
+* fix alias case for pgsql in getSummary me-shaon/laravel-request-analy… by @abidkhan484 in https://github.com/me-shaon/laravel-request-analytics/pull/63
+* Make queue configurable by @maarsson in https://github.com/me-shaon/laravel-request-analytics/pull/65
+* * chore(deps): bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/me-shaon/laravel-request-analytics/pull/64
+  
+
+### New Contributors
+
+* @abidkhan484 made their first contribution in https://github.com/me-shaon/laravel-request-analytics/pull/63
+* @maarsson made their first contribution in https://github.com/me-shaon/laravel-request-analytics/pull/65
+
+**Full Changelog**: https://github.com/me-shaon/laravel-request-analytics/compare/v1.7.0...v1.8.0
+
 ## v1.7.0 - 2025-10-03
 
 ### What's Changed
