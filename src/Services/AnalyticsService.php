@@ -68,7 +68,7 @@ class AnalyticsService
                 DB::raw("{$durationExpression} as duration")
             )
             ->groupBy('session_id')
-            ->having('duration', '>', 0)
+            ->havingRaw("{$durationExpression} > 0")
             ->pluck('duration')
             ->toArray();
 
