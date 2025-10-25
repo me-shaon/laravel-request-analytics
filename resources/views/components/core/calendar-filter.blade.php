@@ -14,7 +14,8 @@
         'last_12_months' => ['label' => 'Last 12 months', 'key' => 'A'],
         'month_to_date' => ['label' => 'Month to Date', 'key' => 'M'],
         'quarter_to_date' => ['label' => 'Quarter to Date', 'key' => 'Q'],
-        'year_to_date' => ['label' => 'Year to Date', 'key' => 'A']
+        'year_to_date' => ['label' => 'Year to Date', 'key' => 'A'],
+        'custom' => ['label' => 'Custom', 'key' => 'C'],
     ];
 @endphp
 
@@ -75,10 +76,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
-                        
+
                         <!-- Current Month/Year -->
                         <h3 class="text-lg font-semibold" x-text="currentMonthYear"></h3>
-                        
+
                         <!-- Next Month -->
                         <button type="button" @click="nextMonth()" class="p-1 hover:bg-gray-100 rounded">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +95,7 @@
                     <template x-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']">
                         <div class="h-8 flex items-center justify-center text-xs font-medium text-gray-500" x-text="day"></div>
                     </template>
-                    
+
                     <!-- Calendar days -->
                     <template x-for="day in calendarDays" :key="day.date">
                         <button
@@ -156,21 +157,81 @@ function calendarFilter() {
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
         calendarDays: [],
-        
+
         init() {
             this.updateCurrentLabel();
+            if (this.startDate) {
+                this.tempStartDate = new Date(this.startDate);
+            }
+            if (this.endDate) {
+                this.tempEndDate = new Date(this.endDate);
+            }
+            if (!this.tempStartDate || !this.tempEndDate) {
+                this.selectPreset(this.selectedPreset);
+            } else {
+                this.detectPreset();
+            }
             this.generateCalendar();
         },
-        
+        detectPreset() {
+            const now = new Date();
+            const start = this.tempStartDate;
+            const end = this.tempEndDate;
+            const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
+            const diffMonths = (end.getFullYear() - start.getFullYear()) * 12 +
+                (end.getMonth() - start.getMonth());
+            // Check last_24_hours
+            if (diffDays === 1 && end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'last_24_hours';
+            }
+            // Check last_7_days
+            else if (diffDays === 7 && end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'last_7_days';
+            }
+            // Check last_30_days
+            else if (diffDays === 30 && end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'last_30_days';
+            }
+            // Check last_3_month
+            else if (diffMonths === 3 && end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'last_3_months';
+            }
+            // Check last_12_month
+            else if (diffMonths === 12 && end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'last_12_months';
+            }
+            // Check month_to_date
+            else if (start.getDate() === 1 &&
+                start.getMonth() === now.getMonth() &&
+                start.getFullYear() === now.getFullYear() &&
+                end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'month_to_date';
+            }
+            // Check quarter_to_date
+            else if (start.getDate() === 1 &&
+                start.getMonth() === now.getMonth() - 3 &&
+                start.getFullYear() === now.getFullYear() &&
+                end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'quarter_to_date';
+            }
+            // Check year_to_date
+            else if (start.getMonth() === 0 && start.getDate() === 1 && start.getFullYear() === now.getFullYear() &&
+                end.toDateString() === now.toDateString()) {
+                this.selectedPreset = 'year_to_date';
+            } else {
+                this.selectedPreset = 'custom';
+            }
+        },
+
         get currentMonthYear() {
             const date = new Date(this.currentYear, this.currentMonth);
             return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         },
-        
+
         selectPreset(preset) {
             this.selectedPreset = preset;
             const now = new Date();
-            
+
             switch(preset) {
                 case 'last_24_hours':
                     this.tempStartDate = new Date(now.getTime() - 24*60*60*1000);
@@ -208,7 +269,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         selectDate(date) {
             if (!this.tempStartDate || (this.tempStartDate && this.tempEndDate)) {
                 this.tempStartDate = new Date(date);
@@ -224,7 +285,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         prevMonth() {
             if (this.currentMonth === 0) {
                 this.currentMonth = 11;
@@ -234,7 +295,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         nextMonth() {
             if (this.currentMonth === 11) {
                 this.currentMonth = 0;
@@ -244,19 +305,19 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         generateCalendar() {
             this.calendarDays = [];
-            
+
             const firstDay = new Date(this.currentYear, this.currentMonth, 1);
             const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
             const startDate = new Date(firstDay);
             startDate.setDate(startDate.getDate() - firstDay.getDay());
-            
+
             for (let i = 0; i < 42; i++) {
                 const date = new Date(startDate);
                 date.setDate(startDate.getDate() + i);
-                
+
                 this.calendarDays.push({
                     date: date,
                     day: date.getDate(),
@@ -267,25 +328,25 @@ function calendarFilter() {
                 });
             }
         },
-        
+
         isDateSelected(date) {
             if (!this.tempStartDate) return false;
             const dateStr = this.formatDate(date);
             const startStr = this.formatDate(this.tempStartDate);
             const endStr = this.tempEndDate ? this.formatDate(this.tempEndDate) : null;
-            
+
             return dateStr === startStr || (endStr && dateStr === endStr);
         },
-        
+
         isDateInRange(date) {
             if (!this.tempStartDate || !this.tempEndDate) return false;
             return date >= this.tempStartDate && date <= this.tempEndDate;
         },
-        
+
         formatDate(date) {
-            return date.toISOString().split('T')[0];
+            // return date.toISOString().split('T')[0]; //Don't respect local timezone
+            return date.toLocaleDateString('en-CA');
         },
-        
         updateCurrentLabel() {
             if (this.startDate && this.endDate) {
                 const start = new Date(this.startDate);
@@ -295,19 +356,19 @@ function calendarFilter() {
                 this.currentLabel = 'Last 30 days';
             }
         },
-        
+
         apply() {
             if (this.tempStartDate) {
                 this.startDate = this.formatDate(this.tempStartDate);
                 this.endDate = this.tempEndDate ? this.formatDate(this.tempEndDate) : this.formatDate(this.tempStartDate);
                 this.updateCurrentLabel();
-                
+
                 // Remove the automatic form submission
                 // this.$el.closest('form').submit();
             }
             this.showPresets = false;
         },
-        
+
         cancel() {
             this.tempStartDate = this.startDate ? new Date(this.startDate) : null;
             this.tempEndDate = this.endDate ? new Date(this.endDate) : null;
