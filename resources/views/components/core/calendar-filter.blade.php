@@ -180,35 +180,36 @@ function calendarFilter() {
             const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
             const diffMonths = (end.getFullYear() - start.getFullYear()) * 12 +
                 (end.getMonth() - start.getMonth());
+
             const endMatchesNow = end.toDateString() === now.toDateString();
+
             // Check last_24_hours
-            if (diffDays === 1 && end.toDateString() === now.toDateString()) {
+            if (diffDays === 1 && endMatchesNow) {
                 this.selectedPreset = 'last_24_hours';
             }
             // Check last_7_days
-            else if (diffDays === 7 && end.toDateString() === now.toDateString()) {
+            else if (diffDays === 7 && endMatchesNow) {
                 this.selectedPreset = 'last_7_days';
             }
             // Check last_30_days
-            else if (diffDays === 30 && end.toDateString() === now.toDateString()) {
+            else if (diffDays === 30 && endMatchesNow) {
                 this.selectedPreset = 'last_30_days';
             }
-            // Check last_3_month
-            else if (diffMonths === 3 && end.toDateString() === now.toDateString()) {
+            // Check last_3_months
+            else if (diffMonths === 3 && endMatchesNow) {
                 this.selectedPreset = 'last_3_months';
             }
-            // Check last_12_month
-            else if (diffMonths === 12 && end.toDateString() === now.toDateString()) {
+            // Check last_12_months
+            else if (diffMonths === 12 && endMatchesNow) {
                 this.selectedPreset = 'last_12_months';
             }
             // Check month_to_date
             else if (start.getDate() === 1 &&
                 start.getMonth() === now.getMonth() &&
                 start.getFullYear() === now.getFullYear() &&
-                end.toDateString() === now.toDateString()) {
+                endMatchesNow) {
                 this.selectedPreset = 'month_to_date';
             }
-            // Check quarter_to_date
             // Check quarter_to_date
             else if (start.getDate() === 1 &&
                 start.getMonth() === (Math.floor(now.getMonth() / 3) * 3) &&
@@ -218,7 +219,7 @@ function calendarFilter() {
             }
             // Check year_to_date
             else if (start.getMonth() === 0 && start.getDate() === 1 && start.getFullYear() === now.getFullYear() &&
-                end.toDateString() === now.toDateString()) {
+                endMatchesNow) {
                 this.selectedPreset = 'year_to_date';
             } else {
                 this.selectedPreset = 'custom';
