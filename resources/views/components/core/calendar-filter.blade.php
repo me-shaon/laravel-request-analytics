@@ -180,6 +180,7 @@ function calendarFilter() {
             const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
             const diffMonths = (end.getFullYear() - start.getFullYear()) * 12 +
                 (end.getMonth() - start.getMonth());
+            const endMatchesNow = end.toDateString() === now.toDateString();
             // Check last_24_hours
             if (diffDays === 1 && end.toDateString() === now.toDateString()) {
                 this.selectedPreset = 'last_24_hours';
@@ -208,10 +209,11 @@ function calendarFilter() {
                 this.selectedPreset = 'month_to_date';
             }
             // Check quarter_to_date
+            // Check quarter_to_date
             else if (start.getDate() === 1 &&
-                start.getMonth() === now.getMonth() - 3 &&
+                start.getMonth() === (Math.floor(now.getMonth() / 3) * 3) &&
                 start.getFullYear() === now.getFullYear() &&
-                end.toDateString() === now.toDateString()) {
+                endMatchesNow) {
                 this.selectedPreset = 'quarter_to_date';
             }
             // Check year_to_date
@@ -344,7 +346,6 @@ function calendarFilter() {
         },
 
         formatDate(date) {
-            // return date.toISOString().split('T')[0]; //Don't respect local timezone
             return date.toLocaleDateString('en-CA');
         },
         updateCurrentLabel() {
