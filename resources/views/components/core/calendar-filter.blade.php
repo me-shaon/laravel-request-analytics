@@ -161,10 +161,12 @@ function calendarFilter() {
         init() {
             this.updateCurrentLabel();
             if (this.startDate) {
-                this.tempStartDate = new Date(this.startDate);
+                const [y, m, d] = this.startDate.split('-').map(Number);
+                this.tempStartDate = new Date(y, m - 1, d);
             }
             if (this.endDate) {
-                this.tempEndDate = new Date(this.endDate);
+                const [y, m, d] = this.endDate.split('-').map(Number);
+                this.tempEndDate = new Date(y, m - 1, d);
             }
             if (!this.tempStartDate || !this.tempEndDate) {
                 this.selectPreset(this.selectedPreset);
