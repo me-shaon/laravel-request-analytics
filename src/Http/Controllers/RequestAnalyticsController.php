@@ -27,7 +27,7 @@ class RequestAnalyticsController extends BaseController
             $params['date_range'] = $dateRange;
         }
 
-        $params['request_category'] = $request->input('request_category', null);
+        $params['request_category'] = $request->input('request_category');
 
         $data = $this->dashboardService->getDashboardData($params);
 
