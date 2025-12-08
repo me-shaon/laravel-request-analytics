@@ -77,7 +77,7 @@ class BotDetectionService
     protected function isIpInBotRange(string $ip): bool
     {
         return collect($this->botIpRanges)
-            ->contains(fn ($range): bool => $this->ipInRange($ip, $range));
+            ->contains(fn (string $range): bool => $this->ipInRange($ip, $range));
     }
 
     protected function ipInRange(string $ip, string $range): bool
