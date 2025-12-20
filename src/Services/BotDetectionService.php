@@ -104,7 +104,7 @@ class BotDetectionService
             );
         }
 
-        $mask = -1 << (32 - $bits);
+        $mask = -1 << (32 - (int) $bits);
         $subnetLong &= $mask;
 
         return ($ipLong & $mask) === $subnetLong;
