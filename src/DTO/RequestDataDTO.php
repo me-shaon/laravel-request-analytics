@@ -4,6 +4,9 @@ namespace MeShaon\RequestAnalytics\DTO;
 
 class RequestDataDTO
 {
+    /**
+     * @param  array<string, mixed>  $browserInfo
+     */
     public function __construct(
         public string $path,
         public string $content,

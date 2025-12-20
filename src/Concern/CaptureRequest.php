@@ -119,7 +119,10 @@ trait CaptureRequest
         return $ip;
     }
 
-    protected function parseUserAgent($userAgent): array
+    /**
+     * @return array{operating_system: string, browser: string, device: string}
+     */
+    protected function parseUserAgent(?string $userAgent): array
     {
         $operating_system = $this->getOperatingSystem($userAgent);
         $browser = $this->getBrowser($userAgent);
@@ -128,7 +131,7 @@ trait CaptureRequest
         return ['operating_system' => $operating_system, 'browser' => $browser, 'device' => $device];
     }
 
-    protected function getOperatingSystem($userAgent): string
+    protected function getOperatingSystem(?string $userAgent): string
     {
         $operatingSystem = 'Unknown';
         $osRegexes = [
@@ -167,7 +170,7 @@ trait CaptureRequest
         return $operatingSystem;
     }
 
-    protected function getBrowser($userAgent): string
+    protected function getBrowser(?string $userAgent): string
     {
         $browser = 'Unknown';
         $browserRegexes = [
@@ -191,7 +194,7 @@ trait CaptureRequest
         return $browser;
     }
 
-    protected function getDevice($userAgent): string
+    protected function getDevice(?string $userAgent): string
     {
         $device = 'Unknown';
         $deviceRegexes = [
