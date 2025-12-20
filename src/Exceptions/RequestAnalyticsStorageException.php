@@ -7,6 +7,9 @@ namespace MeShaon\RequestAnalytics\Exceptions;
  */
 class RequestAnalyticsStorageException extends RequestAnalyticsException
 {
+    /**
+     * @param  array<string, mixed>  $requestData
+     */
     public function __construct(
         protected array $requestData = [],
         string $message = '',
@@ -17,6 +20,9 @@ class RequestAnalyticsStorageException extends RequestAnalyticsException
         parent::__construct($message, (int) $code, $previous);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRequestData(): array
     {
         return $this->requestData;
