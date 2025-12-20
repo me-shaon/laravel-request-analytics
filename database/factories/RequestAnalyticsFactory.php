@@ -5,6 +5,9 @@ namespace MeShaon\RequestAnalytics\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
+/**
+ * @extends Factory<RequestAnalytics>
+ */
 class RequestAnalyticsFactory extends Factory
 {
     protected $model = RequestAnalytics::class;
