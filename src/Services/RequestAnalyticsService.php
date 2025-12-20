@@ -9,7 +9,7 @@ use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
 class RequestAnalyticsService
 {
-    public function store(RequestDataDTO $requestDataDTO)
+    public function store(RequestDataDTO $requestDataDTO): RequestAnalytics
     {
         $requestData = [
             'path' => $requestDataDTO->path,
@@ -34,7 +34,7 @@ class RequestAnalyticsService
         ];
 
         try {
-            return RequestAnalytics::create($requestData);
+            return RequestAnalytics::query()->create($requestData);
         } catch (\Exception $e) {
             throw new RequestAnalyticsStorageException(
                 $requestData,
