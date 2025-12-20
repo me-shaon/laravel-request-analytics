@@ -3,10 +3,10 @@
 namespace MeShaon\RequestAnalytics\Services;
 
 use GeoIp2\Database\Reader;
-use GeoIp2\Exception\AddressNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use MeShaon\RequestAnalytics\Exceptions\AddressNotFoundException;
 use MeShaon\RequestAnalytics\Exceptions\GeolocationProviderException;
 use MeShaon\RequestAnalytics\Exceptions\MaxMindConfigurationException;
 use MeShaon\RequestAnalytics\Exceptions\MaxMindDependencyException;
