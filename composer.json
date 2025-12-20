@@ -21,10 +21,13 @@
         "spatie/laravel-package-tools": "^1.16.0"
     },
     "require-dev": {
+        "larastan/larastan": "^3.8",
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^7.8 | ^8.1",
+        "nunomaduro/larastan": "^3.8",
         "orchestra/workbench": "^8.0 | ^9.0 | ^10.0",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.5 | ^11.0",
         "rector/rector": "^2.1.7"
     },
@@ -57,7 +60,9 @@
         "refactor-fix": "vendor/bin/rector process",
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse",
+        "analyse-baseline": "vendor/bin/phpstan analyse --generate-baseline"
     },
     "config": {
         "sort-packages": true
