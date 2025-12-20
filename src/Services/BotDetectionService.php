@@ -8,6 +8,9 @@ use MeShaon\RequestAnalytics\Exceptions\BotDetectionException;
 
 class BotDetectionService
 {
+    /**
+     * @var array<int, string>
+     */
     protected array $botPatterns = [
         'bot', 'crawler', 'spider', 'scraper', 'facebookexternalhit',
         'facebookcatalog', 'twitterbot', 'linkedinbot', 'whatsapp',
@@ -27,6 +30,9 @@ class BotDetectionService
         'php/', 'node-fetch', 'axios/', 'got/', 'superagent',
     ];
 
+    /**
+     * @var array<int, string>
+     */
     protected array $botIpRanges = [
         // Google
         '66.249.64.0/19',
@@ -57,7 +63,7 @@ class BotDetectionService
         // Check user agent patterns using collection methods
         $userAgentLower = strtolower($userAgent);
         $hasPattern = collect($this->botPatterns)
-            ->contains(fn ($pattern): bool => str_contains($userAgentLower, (string) $pattern));
+            ->contains(fn ($pattern): bool => str_contains($userAgentLower, $pattern));
 
         if ($hasPattern) {
             return true;
