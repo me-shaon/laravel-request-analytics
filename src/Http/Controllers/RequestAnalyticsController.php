@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\View\View;
 use MeShaon\RequestAnalytics\Services\DashboardAnalyticsService;
 
 class RequestAnalyticsController extends BaseController
 {
     public function __construct(protected DashboardAnalyticsService $dashboardService) {}
 
-    public function show(Request $request)
+    public function show(Request $request): Factory|\Illuminate\Contracts\View\View
     {
         $params = [];
 
@@ -31,6 +33,9 @@ class RequestAnalyticsController extends BaseController
 
         $data = $this->dashboardService->getDashboardData($params);
 
-        return view('request-analytics::analytics', $data);
+        /** @var view-string $viewName */
+        $viewName = 'request-analytics::analytics';
+
+        return view($viewName, $data);
     }
 }
