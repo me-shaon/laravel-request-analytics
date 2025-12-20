@@ -48,7 +48,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @param  array<string, mixed>  $dateRange
      * @return array{views: int, visitors: int, bounce_rate: string, average_visit_time: string}
      */
@@ -117,7 +117,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @param  array<string, mixed>  $dateRange
      * @return array{labels: array<int, string>, datasets: array<int, array<string, mixed>>}
      */
@@ -166,7 +166,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array<int, array{path: string, views: int, percentage?: float}>
      */
     public function getTopPages(Builder $query, bool $withPercentages = false): array
@@ -202,7 +202,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array<int, array{domain: string, visits: int, percentage?: float}>
      */
     public function getTopReferrers($query, bool $withPercentages = false): array
@@ -246,7 +246,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array<int, array{browser: string, count: int, percentage?: float}>
      */
     public function getBrowsersData(Builder $query, bool $withPercentages): array
@@ -283,7 +283,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array<int, array{name: string, count: int, percentage?: float}>
      */
     public function getDevices(Builder $query, bool $withPercentages = false): array
@@ -320,7 +320,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array<int, array{name: string, count: int, percentage?: float, code?: string}>
      */
     public function getCountriesData(Builder $query, bool $withPercentages): array
@@ -359,7 +359,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      * @return array{name: string, count: int, percentage?: float}[]
      */
     public function getOperatingSystems(Builder $query, bool $withPercentages = false): array
@@ -473,7 +473,7 @@ class AnalyticsService
     }
 
     /**
-     * @param Builder<RequestAnalytics> $query
+     * @param  Builder<RequestAnalytics>  $query
      */
     public function getUniqueVisitorCount(Builder $query): int
     {

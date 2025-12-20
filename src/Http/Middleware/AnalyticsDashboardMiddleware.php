@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Http\Middleware;
 
-use Illuminate\Http\JsonResponse;
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use MeShaon\RequestAnalytics\Contracts\CanAccessAnalyticsDashboard;
 
