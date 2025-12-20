@@ -25,6 +25,9 @@ class GeolocationService
         $this->apiKey = config('request-analytics.geolocation.api_key');
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     public function lookup(string $ip): array
     {
         // Check if it's a local IP
@@ -52,6 +55,9 @@ class GeolocationService
         return $location;
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function lookupWithIpApi(string $ip): array
     {
         try {
@@ -86,6 +92,9 @@ class GeolocationService
         return $this->getDefaultLocation();
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function lookupWithIpGeolocation(string $ip): array
     {
         if (! $this->apiKey) {
@@ -126,6 +135,9 @@ class GeolocationService
         return $this->getDefaultLocation();
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function lookupWithMaxMind(string $ip): array
     {
         $maxmindType = config('request-analytics.geolocation.maxmind.type', 'webservice');
@@ -137,6 +149,9 @@ class GeolocationService
         };
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function lookupWithMaxMindWebService(string $ip): array
     {
         $userId = config('request-analytics.geolocation.maxmind.user_id');
@@ -194,6 +209,9 @@ class GeolocationService
         return $this->getDefaultLocation();
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function lookupWithMaxMindDatabase(string $ip): array
     {
         $databasePath = config('request-analytics.geolocation.maxmind.database_path');
@@ -256,6 +274,9 @@ class GeolocationService
                str_starts_with($ip, '172.');
     }
 
+    /**
+     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     */
     protected function getDefaultLocation(): array
     {
         return [
