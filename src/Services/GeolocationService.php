@@ -26,7 +26,7 @@ class GeolocationService
     }
 
     /**
-     * @return array{country: string, country_code: string, region: string, city: string, latitude: float|null, longitude: float|null, timezone: string, isp: string}
+     * @return array{country: string, country_code: string, region: string, city: string|null, latitude: float|null, longitude: float|null, timezone: string, isp: string}
      */
     public function lookup(string $ip): array
     {
