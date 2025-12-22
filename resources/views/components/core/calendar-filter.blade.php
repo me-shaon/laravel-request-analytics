@@ -353,13 +353,7 @@ function calendarFilter() {
         formatDate(date) {
             return date.toLocaleDateString('en-CA');
         },
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> 51b943ef1d6212582e38eb8cecdc7287bde38124
-=======
->>>>>>> 51b943ef1d6212582e38eb8cecdc7287bde38124
         updateCurrentLabel() {
             if (this.startDate && this.endDate) {
                 const start = new Date(this.startDate);
