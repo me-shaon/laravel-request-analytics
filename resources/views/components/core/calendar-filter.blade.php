@@ -14,7 +14,8 @@
         'last_12_months' => ['label' => 'Last 12 months', 'key' => 'A'],
         'month_to_date' => ['label' => 'Month to Date', 'key' => 'M'],
         'quarter_to_date' => ['label' => 'Quarter to Date', 'key' => 'Q'],
-        'year_to_date' => ['label' => 'Year to Date', 'key' => 'A']
+        'year_to_date' => ['label' => 'Year to Date', 'key' => 'A'],
+        'custom' => ['label' => 'Custom', 'key' => 'C'],
     ];
 @endphp
 
@@ -76,8 +77,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
+
                         <!-- Current Month/Year -->
                         <h3 class="text-lg font-semibold" x-text="currentMonthYear"></h3>
+
                         <!-- Next Month -->
                         <button type="button" @click="nextMonth()" class="p-1 hover:bg-gray-100 rounded">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,7 +161,73 @@ function calendarFilter() {
 
         init() {
             this.updateCurrentLabel();
+            if (this.startDate) {
+                const [y, m, d] = this.startDate.split('-').map(Number);
+                this.tempStartDate = new Date(y, m - 1, d);
+            }
+            if (this.endDate) {
+                const [y, m, d] = this.endDate.split('-').map(Number);
+                this.tempEndDate = new Date(y, m - 1, d);
+            }
+            if (!this.tempStartDate || !this.tempEndDate) {
+                this.selectPreset(this.selectedPreset);
+            } else {
+                this.detectPreset();
+            }
             this.generateCalendar();
+        },
+
+        detectPreset() {
+            const now = new Date();
+            const start = this.tempStartDate;
+            const end = this.tempEndDate;
+            const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24));
+            const diffMonths = (end.getFullYear() - start.getFullYear()) * 12 +
+                (end.getMonth() - start.getMonth());
+
+            const endMatchesNow = end.toDateString() === now.toDateString();
+
+            // Check last_24_hours
+            if (diffDays === 1 && endMatchesNow) {
+                this.selectedPreset = 'last_24_hours';
+            }
+            // Check last_7_days
+            else if (diffDays === 7 && endMatchesNow) {
+                this.selectedPreset = 'last_7_days';
+            }
+            // Check last_30_days
+            else if (diffDays === 30 && endMatchesNow) {
+                this.selectedPreset = 'last_30_days';
+            }
+            // Check last_3_months
+            else if (diffMonths === 3 && endMatchesNow) {
+                this.selectedPreset = 'last_3_months';
+            }
+            // Check last_12_months
+            else if (diffMonths === 12 && endMatchesNow) {
+                this.selectedPreset = 'last_12_months';
+            }
+            // Check month_to_date
+            else if (start.getDate() === 1 &&
+                start.getMonth() === now.getMonth() &&
+                start.getFullYear() === now.getFullYear() &&
+                endMatchesNow) {
+                this.selectedPreset = 'month_to_date';
+            }
+            // Check quarter_to_date
+            else if (start.getDate() === 1 &&
+                start.getMonth() === (Math.floor(now.getMonth() / 3) * 3) &&
+                start.getFullYear() === now.getFullYear() &&
+                endMatchesNow) {
+                this.selectedPreset = 'quarter_to_date';
+            }
+            // Check year_to_date
+            else if (start.getMonth() === 0 && start.getDate() === 1 && start.getFullYear() === now.getFullYear() &&
+                endMatchesNow) {
+                this.selectedPreset = 'year_to_date';
+            } else {
+                this.selectedPreset = 'custom';
+            }
         },
 
         get currentMonthYear() {
@@ -282,9 +351,12 @@ function calendarFilter() {
         },
 
         formatDate(date) {
-            return date.toISOString().split('T')[0];
+            return date.toLocaleDateString('en-CA');
         },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51b943ef1d6212582e38eb8cecdc7287bde38124
         updateCurrentLabel() {
             if (this.startDate && this.endDate) {
                 const start = new Date(this.startDate);
