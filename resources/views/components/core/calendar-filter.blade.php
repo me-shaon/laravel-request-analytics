@@ -26,9 +26,10 @@
             @click="showPresets = !showPresets"
             class="inline-flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-10 hover:bg-gray-50"
         >
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
             </svg>
+
             <span x-text="currentLabel"></span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -75,10 +76,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
-                        
                         <!-- Current Month/Year -->
                         <h3 class="text-lg font-semibold" x-text="currentMonthYear"></h3>
-                        
                         <!-- Next Month -->
                         <button type="button" @click="nextMonth()" class="p-1 hover:bg-gray-100 rounded">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +93,7 @@
                     <template x-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']">
                         <div class="h-8 flex items-center justify-center text-xs font-medium text-gray-500" x-text="day"></div>
                     </template>
-                    
+
                     <!-- Calendar days -->
                     <template x-for="day in calendarDays" :key="day.date">
                         <button
@@ -156,21 +155,21 @@ function calendarFilter() {
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
         calendarDays: [],
-        
+
         init() {
             this.updateCurrentLabel();
             this.generateCalendar();
         },
-        
+
         get currentMonthYear() {
             const date = new Date(this.currentYear, this.currentMonth);
             return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         },
-        
+
         selectPreset(preset) {
             this.selectedPreset = preset;
             const now = new Date();
-            
+
             switch(preset) {
                 case 'last_24_hours':
                     this.tempStartDate = new Date(now.getTime() - 24*60*60*1000);
@@ -208,7 +207,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         selectDate(date) {
             if (!this.tempStartDate || (this.tempStartDate && this.tempEndDate)) {
                 this.tempStartDate = new Date(date);
@@ -224,7 +223,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         prevMonth() {
             if (this.currentMonth === 0) {
                 this.currentMonth = 11;
@@ -234,7 +233,7 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         nextMonth() {
             if (this.currentMonth === 11) {
                 this.currentMonth = 0;
@@ -244,19 +243,19 @@ function calendarFilter() {
             }
             this.generateCalendar();
         },
-        
+
         generateCalendar() {
             this.calendarDays = [];
-            
+
             const firstDay = new Date(this.currentYear, this.currentMonth, 1);
             const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
             const startDate = new Date(firstDay);
             startDate.setDate(startDate.getDate() - firstDay.getDay());
-            
+
             for (let i = 0; i < 42; i++) {
                 const date = new Date(startDate);
                 date.setDate(startDate.getDate() + i);
-                
+
                 this.calendarDays.push({
                     date: date,
                     day: date.getDate(),
@@ -267,25 +266,25 @@ function calendarFilter() {
                 });
             }
         },
-        
+
         isDateSelected(date) {
             if (!this.tempStartDate) return false;
             const dateStr = this.formatDate(date);
             const startStr = this.formatDate(this.tempStartDate);
             const endStr = this.tempEndDate ? this.formatDate(this.tempEndDate) : null;
-            
+
             return dateStr === startStr || (endStr && dateStr === endStr);
         },
-        
+
         isDateInRange(date) {
             if (!this.tempStartDate || !this.tempEndDate) return false;
             return date >= this.tempStartDate && date <= this.tempEndDate;
         },
-        
+
         formatDate(date) {
             return date.toISOString().split('T')[0];
         },
-        
+
         updateCurrentLabel() {
             if (this.startDate && this.endDate) {
                 const start = new Date(this.startDate);
@@ -295,19 +294,19 @@ function calendarFilter() {
                 this.currentLabel = 'Last 30 days';
             }
         },
-        
+
         apply() {
             if (this.tempStartDate) {
                 this.startDate = this.formatDate(this.tempStartDate);
                 this.endDate = this.tempEndDate ? this.formatDate(this.tempEndDate) : this.formatDate(this.tempStartDate);
                 this.updateCurrentLabel();
-                
+
                 // Remove the automatic form submission
                 // this.$el.closest('form').submit();
             }
             this.showPresets = false;
         },
-        
+
         cancel() {
             this.tempStartDate = this.startDate ? new Date(this.startDate) : null;
             this.tempEndDate = this.endDate ? new Date(this.endDate) : null;

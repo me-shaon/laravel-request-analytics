@@ -8,12 +8,12 @@
             </div>
             <div class="w-full sm:w-auto">
                 <form method="GET" action="{{ route(config('request-analytics.route.name')) }}" class="flex items-center gap-2 flex-wrap">
-                    <x-request-analytics::core.calendar-filter 
-                        :dateRange="$dateRange" 
+                    <x-request-analytics::core.calendar-filter
+                        :dateRange="$dateRange"
                         :startDate="request('start_date')"
                         :endDate="request('end_date')"
                     />
-                    <select name="request_category" class="bg-white border border-gray-300 rounded-lg px-3 py-2.5 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-10">
+                    <select name="request_category" class="bg-white border border-gray-300 rounded-lg px-3 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-10">
                         <option value="" {{ !request('request_category') ? 'selected' : '' }}>All Requests</option>
                         <option value="web" {{ request('request_category') == 'web' ? 'selected' : '' }}>Web Only</option>
                         <option value="api" {{ request('request_category') == 'api' ? 'selected' : '' }}>API Only</option>
