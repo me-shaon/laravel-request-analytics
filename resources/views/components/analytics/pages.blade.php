@@ -33,6 +33,6 @@
             percentage="{{ $page['percentage'] }}"
         />
     @empty
-        <p class="text-sm text-gray-500 text-center py-5">No pages</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No pages</p>
     @endforelse
 </x-request-analytics::stats.list>
