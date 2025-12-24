@@ -46,6 +46,6 @@
             imgSrc="{{ getBrowserImage($browser['browser']) }}"
         />
     @empty
-        <p class="text-sm text-gray-500 text-center py-5">No browsers</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No browsers</p>
     @endforelse
 </x-request-analytics::stats.list>
