@@ -1,5 +1,5 @@
 <x-request-analytics::layouts.app>
-    <main class="container px-4 sm:px-6 lg:px-8 py-8" x-data="{ darkMode: localStorage.theme === 'dark' }">
+    <main class="container px-4 sm:px-6 lg:px-8 py-8" x-data="{ darkMode: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) }">
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div class="w-full sm:w-auto">
