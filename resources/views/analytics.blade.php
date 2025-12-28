@@ -63,7 +63,7 @@
         <!-- Additional Analytics -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <x-request-analytics::analytics.broswers :browsers='$browsers'/>
+                <x-request-analytics::analytics.browsers :browsers='$browsers'/>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <x-request-analytics::analytics.operating-systems :operatingSystems='$operatingSystems'/>
