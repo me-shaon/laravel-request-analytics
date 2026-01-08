@@ -6,12 +6,17 @@ namespace MeShaon\RequestAnalytics\Services;
 
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 
 class AnalyticsService
 {
+    /**
+     * @param  array{date_range?: int, start_date?: int, end_date?:int, request_category?:string, with_percentages?:bool}  $params
+     * @return array{start: Carbon, end: Carbon, days: int, key: string}
+     */
     public function getDateRange(array $params): array
     {
         if (isset($params['start_date']) && isset($params['end_date'])) {
@@ -32,14 +37,24 @@ class AnalyticsService
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $dateRange
+     * @return Builder<RequestAnalytics>
+     */
     public function getBaseQuery(array $dateRange, ?string $requestCategory = null): Builder
     {
         return RequestAnalytics::whereBetween('visited_at', [$dateRange['start'], $dateRange['end']])
             ->when($requestCategory, fn (Builder $query, string $category) => $query->where('request_category', $category));
     }
 
-    public function getSummary($query, array $dateRange): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @param  array<string, mixed>  $dateRange
+     * @return array{views: int, visitors: int, bounce_rate: string, average_visit_time: string}
+     */
+    public function getSummary(Builder $query, array $dateRange): array
     {
+        /* @var int $totalViews */
         $totalViews = (clone $query)->count();
         $uniqueVisitors = $this->getUniqueVisitorCount($query);
 
@@ -84,7 +99,10 @@ class AnalyticsService
         ];
     }
 
-    protected function formatTimeWithCarbon($seconds): string
+    /**
+     * @throws \Exception
+     */
+    protected function formatTimeWithCarbon(float $seconds): string
     {
         if ($seconds <= 0) {
             return '0s';
@@ -98,7 +116,12 @@ class AnalyticsService
             ]);
     }
 
-    public function getChartData($query, array $dateRange): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @param  array<string, mixed>  $dateRange
+     * @return array{labels: array<int, string>, datasets: array<int, array<string, mixed>>}
+     */
+    public function getChartData(Builder $query, array $dateRange): array
     {
         $data = (clone $query)
             ->select(
@@ -121,8 +144,10 @@ class AnalyticsService
             $labels[] = $current->format('M d');
 
             if ($data->has($dateStr)) {
-                $views[] = $data->get($dateStr)->views;
-                $visitors[] = $data->get($dateStr)->unique_visitor_count;
+                /** @var \stdClass $item */
+                $item = $data->get($dateStr);
+                $views[] = $item->views;
+                $visitors[] = $item->unique_visitor_count;
             } else {
                 $views[] = 0;
                 $visitors[] = 0;
@@ -140,8 +165,13 @@ class AnalyticsService
         ];
     }
 
-    public function getTopPages($query, bool $withPercentages = false): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array<int, array{path: string, views: int, percentage?: float}>
+     */
+    public function getTopPages(Builder $query, bool $withPercentages = false): array
     {
+        /* @var array<int, array{path: string, views: int}> $pages */
         $pages = (clone $query)
             ->select('path', DB::raw('COUNT(*) as views'))
             ->groupBy('path')
@@ -159,6 +189,7 @@ class AnalyticsService
             return [];
         }
 
+        /** @var array<int, array{path: string, views: int, percentage: float}> */
         return collect($pages)->map(function (array $page) use ($totalViews): array {
             $percentage = round(($page['views'] / $totalViews) * 100, 1);
 
@@ -170,10 +201,16 @@ class AnalyticsService
         })->toArray();
     }
 
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array<int, array{domain: string, visits: int, percentage?: float}>
+     */
     public function getTopReferrers($query, bool $withPercentages = false): array
     {
+
         $domainExpression = $this->getDomainExpression('referrer');
 
+        /* @var array<int, array{domain: string, visits: int}> $referrers */
         $referrers = (clone $query)
             ->select(
                 DB::raw("{$domainExpression} as domain"),
@@ -196,6 +233,7 @@ class AnalyticsService
             return [];
         }
 
+        /** @var array<int, array{domain: string, visits: int, percentage: float}> */
         return collect($referrers)->map(function (array $referrer) use ($totalVisits): array {
             $percentage = round(($referrer['visits'] / $totalVisits) * 100, 1);
 
@@ -207,8 +245,13 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getBrowsersData($query, bool $withPercentages): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array<int, array{browser: string, count: int, percentage?: float}>
+     */
+    public function getBrowsersData(Builder $query, bool $withPercentages): array
     {
+        /* @var array<int, array{browser: string, count: int}> $browsers */
         $browsers = (clone $query)
             ->select('browser', DB::raw('COUNT(*) as count'))
             ->whereNotNull('browser')
@@ -227,6 +270,7 @@ class AnalyticsService
             return [];
         }
 
+        /** @var array<int, array{browser: string, count: int, percentage: float}> */
         return collect($browsers)->map(function (array $browser) use ($totalCount): array {
             $percentage = round(($browser['count'] / $totalCount) * 100, 1);
 
@@ -238,8 +282,13 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getDevices($query, bool $withPercentages = false): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array<int, array{name: string, count: int, percentage?: float}>
+     */
+    public function getDevices(Builder $query, bool $withPercentages = false): array
     {
+        /* @var array<int, array{device: string, count: int}> $devices */
         $devices = (clone $query)
             ->select('device', DB::raw('COUNT(*) as count'))
             ->whereNotNull('device')
@@ -258,6 +307,7 @@ class AnalyticsService
             return [];
         }
 
+        /** @var array<int, array{name: string, count: int, percentage: float}> */
         return collect($devices)->map(function (array $device) use ($totalCount): array {
             $percentage = round(($device['count'] / $totalCount) * 100, 1);
 
@@ -269,8 +319,13 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getCountriesData($query, bool $withPercentages): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array<int, array{name: string, count: int, percentage?: float, code?: string}>
+     */
+    public function getCountriesData(Builder $query, bool $withPercentages): array
     {
+        /* @var array<int, array{country: string, count: int}> $countries */
         $countries = (clone $query)
             ->select('country', DB::raw('COUNT(*) as count'))
             ->whereNotNull('country')
@@ -290,6 +345,7 @@ class AnalyticsService
             return [];
         }
 
+        /** @var array<int, array{name: string, count: int, percentage: int, code: string}> */
         return collect($countries)->map(function (array $country) use ($totalCount): array {
             $percentage = round(($country['count'] / $totalCount) * 100, 1);
 
@@ -302,14 +358,19 @@ class AnalyticsService
         })->toArray();
     }
 
-    public function getOperatingSystems($query, bool $withPercentages = false): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @return array{name: string, count: int, percentage?: float}[]
+     */
+    public function getOperatingSystems(Builder $query, bool $withPercentages = false): array
     {
+        /* @var int $totalVisitors */
         $totalVisitors = (clone $query)->distinct('session_id')->count('session_id');
 
         if ($totalVisitors === 0) {
             return [];
         }
-
+        /* @var array<int, array{name: string, count: int}> $operatingSystems */
         $operatingSystems = (clone $query)
             ->select('operating_system as name', DB::raw('COUNT(DISTINCT session_id) as count'))
             ->whereNotNull('operating_system')
@@ -323,6 +384,7 @@ class AnalyticsService
             return $operatingSystems;
         }
 
+        /** @var array<int, array<string, mixed>> */
         return collect($operatingSystems)->map(function (array $os) use ($totalVisitors): array {
             $percentage = round(($os['count'] / $totalVisitors) * 100, 1);
 
@@ -334,6 +396,19 @@ class AnalyticsService
         })->toArray();
     }
 
+    /**
+     * @param  array<string, mixed>  $params
+     * @return array{
+     *     summary: array<string, mixed>,
+     *     chart: array<string, mixed>,
+     *     top_pages: array<int, mixed>,
+     *     top_referrers: array<int, mixed>,
+     *     browsers: array<int, mixed>,
+     *     devices: array<int, mixed>,
+     *     countries: array<int, mixed>,
+     *     operating_systems: array<int, mixed>
+     * }
+     */
     public function getOverviewData(array $params): array
     {
         $dateRange = $this->getDateRange($params);
@@ -353,6 +428,10 @@ class AnalyticsService
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $params
+     * @return LengthAwarePaginator<int, RequestAnalytics>
+     */
     public function getVisitors(array $params, int $perPage = 50)
     {
         $dateRange = $this->getDateRange($params);
@@ -373,7 +452,11 @@ class AnalyticsService
             ->paginate($perPage);
     }
 
-    public function getPageViews(array $params, int $perPage = 50)
+    /**
+     * @param  array<string, mixed>  $params
+     * @return LengthAwarePaginator<int, RequestAnalytics>
+     */
+    public function getPageViews(array $params, int $perPage = 50): LengthAwarePaginator
     {
         $dateRange = $this->getDateRange($params);
         $requestCategory = $params['request_category'] ?? null;
@@ -389,7 +472,10 @@ class AnalyticsService
             ->paginate($perPage);
     }
 
-    public function getUniqueVisitorCount($query): int
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     */
+    public function getUniqueVisitorCount(Builder $query): int
     {
         return (clone $query)
             ->select(DB::raw($this->getUniqueVisitorCountExpression()))
@@ -409,14 +495,14 @@ class AnalyticsService
         return match ($driver) {
             'mysql' => "SUBSTRING_INDEX(SUBSTRING_INDEX({$column}, '/', 3), '//', -1)",
             'pgsql' => "SPLIT_PART(SPLIT_PART({$column}, '/', 3), '//', 2)",
-            'sqlite' => "CASE 
-                WHEN {$column} LIKE '%://%' THEN 
+            'sqlite' => "CASE
+                WHEN {$column} LIKE '%://%' THEN
                     REPLACE(
                         REPLACE(
                             SUBSTR({$column}, INSTR({$column}, '://') + 3),
                             SUBSTR(SUBSTR({$column}, INSTR({$column}, '://') + 3), INSTR(SUBSTR({$column}, INSTR({$column}, '://') + 3), '/'))
                             , ''
-                        ), 
+                        ),
                         'www.', ''
                     )
                 ELSE {$column}

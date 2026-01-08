@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Services;
 
+use Illuminate\Database\Eloquent\Builder;
+use MeShaon\RequestAnalytics\Models\RequestAnalytics;
+
 class DashboardAnalyticsService
 {
     public function __construct(protected AnalyticsService $analyticsService) {}
 
+    /**
+     * @param  array<string, mixed>  $params
+     * @return array<string, mixed>
+     */
     public function getDashboardData(array $params): array
     {
         $dateRange = $this->analyticsService->getDateRange($params);
@@ -28,12 +35,18 @@ class DashboardAnalyticsService
         ];
     }
 
-    protected function getChartData($query, array $dateRange): array
+    /**
+     * @param  Builder<RequestAnalytics>  $query
+     * @param  array<string, mixed>  $dateRange
+     * @return array{labels: array<int, string>, datasets: array<int, array<string, mixed>>}
+     */
+    protected function getChartData(Builder $query, array $dateRange): array
     {
         $chartData = $this->analyticsService->getChartData($query, $dateRange);
 
-        // Add dashboard-specific styling with high contrast colors
-        $chartData['datasets'] = collect($chartData['datasets'])->map(function (array $dataset): array {
+        /** @var array<int, array<string, mixed>> $datasets */
+        $datasets = $chartData['datasets'];
+        $chartData['datasets'] = collect($datasets)->map(function (array $dataset): array {
             if ($dataset['label'] === 'Views') {
                 return array_merge($dataset, [
                     'backgroundColor' => 'rgba(220, 38, 127, 0.1)', // Bright pink background
