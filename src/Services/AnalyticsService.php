@@ -391,9 +391,9 @@ class AnalyticsService
 
     public function getUniqueVisitorCount($query): int
     {
-        return (clone $query)
+        return (int) ((clone $query)
             ->select(DB::raw($this->getUniqueVisitorCountExpression()))
-            ->value('unique_visitor_count') ?? 0;
+            ->value('unique_visitor_count') ?? 0);
     }
 
     public function getUniqueVisitorCountExpression(): string
