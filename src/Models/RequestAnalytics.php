@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use MeShaon\RequestAnalytics\Database\Factories\RequestAnalyticsFactory;
 
 class RequestAnalytics extends Model
 {
+    /** @use HasFactory<RequestAnalyticsFactory> */
     use HasFactory, MassPrunable;
 
     public const UPDATED_AT = null;
@@ -31,7 +33,7 @@ class RequestAnalytics extends Model
     }
 
     /**
-     * Get the prunable model query.
+     * @return Builder<RequestAnalytics>
      */
     public function prunable(): Builder
     {

@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $tableName = config('request-analytics.database.table', 'request_analytics');
         $connection = config('request-analytics.database.connection');
 
         if (! Schema::connection($connection)->hasTable($tableName)) {
-            Schema::connection($connection)->create($tableName, function (Blueprint $table) {
+            Schema::connection($connection)->create($tableName, function (Blueprint $table): void {
                 $table->id();
                 $table->string('path');
                 $table->string('page_title')->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration
         }
     }
 
-    public function down()
+    public function down(): void
     {
         $tableName = config('request-analytics.database.table', 'request_analytics');
         $connection = config('request-analytics.database.connection');

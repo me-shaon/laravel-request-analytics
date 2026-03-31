@@ -13,6 +13,9 @@ class OverviewRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return array<string, string|array<int, string>>
+     */
     public function rules(): array
     {
         return [
