@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Testing\TestResponse;
 use MeShaon\RequestAnalytics\RequestAnalyticsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -16,7 +17,7 @@ class TestCase extends Orchestra
     /**
      * The latest test response (if any).
      *
-     * @var \Illuminate\Testing\TestResponse|null
+     * @var TestResponse|null
      */
     public static $latestResponse;
 
