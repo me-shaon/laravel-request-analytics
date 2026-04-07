@@ -13,6 +13,13 @@ class TestCase extends Orchestra
 {
     use RefreshDatabase;
 
+    /**
+     * The latest test response (if any).
+     *
+     * @var \Illuminate\Testing\TestResponse|null
+     */
+    public static $latestResponse;
+
     protected function setUp(): void
     {
         parent::setUp();
