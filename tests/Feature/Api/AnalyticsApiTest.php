@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MeShaon\RequestAnalytics\Tests\Feature\Api;
 
+use Illuminate\Support\Facades\Cache;
 use MeShaon\RequestAnalytics\Models\RequestAnalytics;
 use MeShaon\RequestAnalytics\Tests\Feature\BaseFeatureTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -126,7 +127,7 @@ class AnalyticsApiTest extends BaseFeatureTestCase
     #[Test]
     public function it_returns_empty_overview_data(): void
     {
-        \Illuminate\Support\Facades\Cache::flush();
+        Cache::flush();
 
         $response = $this->getJson(route('request-analytics.api.overview'));
 
