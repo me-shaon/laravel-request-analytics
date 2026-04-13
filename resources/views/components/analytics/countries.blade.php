@@ -34,6 +34,6 @@
                 imgSrc="https://www.worldatlas.com/r/w236/img/flag/{{$country['code']}}-flag.jpg"
         />
     @empty
-        <p class="text-sm text-gray-500 text-center py-5">No countries</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No countries</p>
     @endforelse
 </x-request-analytics::stats.list>
