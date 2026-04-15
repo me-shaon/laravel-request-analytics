@@ -9,7 +9,7 @@
 
 ## Overview
 
-Laravel Request Analytics is a comprehensive web analytics solution designed specifically for Laravel applications. Track traffic, understand your audience, and monitor performance - all from a clean dashboard, without sending data to third parties.
+Laravel Request Analytics is a comprehensive web analytics solution designed specifically for Laravel applications. It allows you to track traffic, understand your audience, and monitor performance through a clean dashboard, without sending data to third parties.
 
 ## What You Get
 
