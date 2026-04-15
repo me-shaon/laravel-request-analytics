@@ -15,10 +15,12 @@ Laravel Request Analytics is a comprehensive web analytics solution designed spe
 
 - **Instant dashboard**: Real-time page views, visitors, bounce rate, and session duration
 - **Traffic & behavior insights**: Clear view of user interactions, traffic patterns, and performance metrics
-- **Privacy-first**: GDPR-compliant with IP anonymization, configurable data retention, and no third-party data sharing
-- **Smart bot filtering**: Automatically excludes crawlers, search engines, and monitoring tools from your stats
-- **Geo & device insights**: Country, city, browser, OS, and device breakdown with multiple geolocation provider support
+- **Privacy-first**: GDPR-friendly, IP anonymization, retention control, no third-party sharing
+- **Smart bot filtering**: Automatically excludes crawlers, bots, and monitoring tools
+- **Geo & device insights**: Location, browser, OS, and device breakdown with multiple provider support
 - **REST API access**: Programmatic access to all analytics data for custom reporting and integrations
+
+For full details, see the sections below.
 
 ## Installation
 
