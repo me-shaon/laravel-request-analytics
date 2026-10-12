@@ -98,7 +98,7 @@
                     </template>
 
                     <!-- Calendar days -->
-                    <template x-for="day in calendarDays" :key="day.date">
+                    <template x-for="day in calendarDays" :key="day.date.toISOString()">
                         <button
                             type="button"
                             @click="selectDate(day.date)"
