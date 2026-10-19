@@ -3,6 +3,12 @@
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div class="w-full sm:w-auto">
+                @if (filled(config('request-analytics.back_link.url')))
+                    <a href="{{ config('request-analytics.back_link.url') }}" class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-3">
+                        <span aria-hidden="true">&larr;</span>
+                        {{ config('request-analytics.back_link.label', 'Back to site') }}
+                    </a>
+                @endif
                 <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Analytics Dashboard</h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Track your website performance and user insights</p>
             </div>

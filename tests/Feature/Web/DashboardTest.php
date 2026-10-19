@@ -22,6 +22,28 @@ class DashboardTest extends BaseFeatureTestCase
     }
 
     #[Test]
+    public function it_hides_the_back_link_by_default(): void
+    {
+        $this->get(route('request-analytics.dashboard'))
+            ->assertOk()
+            ->assertDontSee('Back to site');
+    }
+
+    #[Test]
+    public function it_shows_the_configured_back_link(): void
+    {
+        config([
+            'request-analytics.back_link.url' => '/admin',
+            'request-analytics.back_link.label' => 'Back to dashboard',
+        ]);
+
+        $this->get(route('request-analytics.dashboard'))
+            ->assertOk()
+            ->assertSee('href="/admin"', false)
+            ->assertSee('Back to dashboard');
+    }
+
+    #[Test]
     public function it_returns_dashboard_view_with_empty_data(): void
     {
         $response = $this->get(route('request-analytics.dashboard'));

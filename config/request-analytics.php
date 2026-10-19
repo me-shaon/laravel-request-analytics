@@ -15,6 +15,13 @@ return [
         'pathname' => env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
     ],
 
+    // Optional "back" link shown above the dashboard title so users can return to your app.
+    // Leave `url` empty (default) to hide it. Accepts a path ('/admin') or a full URL.
+    'back_link' => [
+        'url' => env('REQUEST_ANALYTICS_BACK_URL'),
+        'label' => env('REQUEST_ANALYTICS_BACK_LABEL', 'Back to site'),
+    ],
+
     'capture' => [
         'web' => true,
         'api' => true,

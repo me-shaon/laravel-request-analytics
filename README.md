@@ -281,6 +281,8 @@ php artisan model:prune --model="MeShaon\RequestAnalytics\Models\RequestAnalytic
 ### Route Configuration
 - `route.name`: Named route identifier (default: `request.analytics`)
 - `route.pathname`: URL path for dashboard access (default: `analytics`)
+- `back_link.url`: Show a "back" link above the dashboard title that leads to your app, e.g. `'/admin'` or `'https://example.com'` (default: `null`, link hidden). Env: `REQUEST_ANALYTICS_BACK_URL`
+- `back_link.label`: Text of that link (default: `Back to site`). Env: `REQUEST_ANALYTICS_BACK_LABEL`
 
 ### Data Capture Settings
 - `capture.web`: Track web requests (default: `true`)
